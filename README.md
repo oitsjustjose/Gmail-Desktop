@@ -1,4 +1,4 @@
-# Electron Quick Start (CompUTC's Version at least)
+# Gmail for Electron
 
 This repo includes the sample code for creating a desktop-version of a web application (Gmail, in this case).
 
