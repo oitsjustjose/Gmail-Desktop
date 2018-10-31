@@ -2,7 +2,7 @@
 
 This repo includes the sample code for creating a desktop-version of a web application (Gmail, in this case).
 
-You can also find released in the **Releases** section
+(Releases coming to the Releases page *soon*)
 
 ## Building (For release):
 
@@ -14,9 +14,9 @@ Once done, run any or all of the following:
 
 **Windows**: `electron-packager . "Gmail" --overwrite --asar=true --platform=win32 --arch=ia32 --icon=icon.ico --prune=true --out=release-builds --version-string.CompanyName=oitsjustjose --version-string.FileDescription="A simple Gmail electron wrapper" --version-string.ProductName="Gmail"`
 
-**macOS**: `electron-packager . --overwrite --platform=darwin --arch=x64 --icon=img/icon.icns --prune=true --out=release-builds`
+**macOS**: `electron-packager . --overwrite --platform=darwin --arch=x64 --icon=./icon.icns --prune=true --out=release-builds`
 
-**Linux**: `electron-packager . "Gmail" --overwrite --asar=true --platform=linux --arch=x64 --icon=img/icon.png --prune=true --out=release-builds`
+**Linux**: `electron-packager . "Gmail" --overwrite --asar=true --platform=linux --arch=x64 --icon=./icon.png --prune=true --out=release-builds`
 
 ## TODO:
 
