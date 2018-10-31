@@ -1,8 +1,12 @@
 # Gmail for Electron
 
-This repo includes the sample code for creating a desktop-version of a web application (Gmail, in this case).
+![icon](https://github.com/oitsjustjose/Gmail-Electron/blob/master/icon.png)
 
-(Releases coming to the Releases page *soon*)
+This repo includes the sample code for creating a desktop-version of Gmail.
+
+![screenshot](https://github.com/oitsjustjose/Gmail-Electron/blob/master/screenshot.png)
+
+Releases found [here](https://github.com/oitsjustjose/Gmail-Electron/releases)
 
 ## Building (For release):
 
