@@ -11,33 +11,50 @@ const ipc = require('electron').ipcMain;
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let mainWindow
+let mainWindow;
 
 ipc.on('reply', (event, message) => {
   console.log(event, message);
   mainWindow.webContents.send('messageFromMain', `This is the message from the second window: ${message}`);
-})
+});
 
 function createMenu() {
-  var template = [
-    {
+  var template = [{
       label: 'Gmail',
-      submenu: [
-        { label: 'About Gmail', role: 'about' },
-        { type: 'separator' },
-        { role: 'services', submenu: [] },
-        { type: 'separator' },
-        { role: 'hide' },
-        { role: 'hideothers' },
-        { role: 'unhide' },
-        { type: 'separator' },
-        { role: 'quit' }
+      submenu: [{
+          label: 'About Gmail',
+          role: 'about'
+        },
+        {
+          type: 'separator'
+        },
+        {
+          role: 'services',
+          submenu: []
+        },
+        {
+          type: 'separator'
+        },
+        {
+          role: 'hide'
+        },
+        {
+          role: 'hideothers'
+        },
+        {
+          role: 'unhide'
+        },
+        {
+          type: 'separator'
+        },
+        {
+          role: 'quit'
+        }
       ]
     },
     {
       label: 'Edit',
-      submenu: [
-        {
+      submenu: [{
           label: 'Undo',
           accelerator: 'Command+Z',
           selector: 'undo:'
@@ -74,8 +91,7 @@ function createMenu() {
     },
     {
       label: 'Window',
-      submenu: [
-        {
+      submenu: [{
           label: 'Minimize',
           accelerator: 'Command+M',
           selector: 'performMiniaturize:'
@@ -118,7 +134,6 @@ function createWindow() {
   }))
 
   mainWindow.on('closed', function () {
-    mainWindow = null
   })
 
   mainWindow.setMenu(null);
@@ -127,39 +142,40 @@ function createWindow() {
 app.on('ready', function () {
   createWindow();
   createMenu();
-})
+});
 
 app.on('web-contents-created', (e, contents) => {
   if (contents.getType() == 'webview') {
     contents.on('new-window', (e, url) => {
-      e.preventDefault()
+      e.preventDefault();
       if (url.indexOf("google") != -1) {
         mainWindow.loadURL(url);
+        mainWindow.webContents.session.flushStorageData();
+      } else {
+        shell.openExternal(url);
       }
-      else {
-        shell.openExternal(url)
-      }
-    })
+    });
     contents.on('will-navigate', (e, url) => {
-      e.preventDefault()
+      e.preventDefault();
       if (url.indexOf("google") != -1) {
         mainWindow.loadURL(url);
+        mainWindow.webContents.session.flushStorageData();
+      } else {
+        shell.openExternal(url);
       }
-      else {
-        shell.openExternal(url)
-      }
-    })
+    });
   }
-})
+});
 
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') {
-    app.quit()
+    app.quit();
   }
-})
+  mainWindow.webContents.session.flushStorageData();
+});
 
 app.on('activate', function () {
   if (mainWindow === null) {
-    createWindow()
+    createWindow();
   }
-})
+});

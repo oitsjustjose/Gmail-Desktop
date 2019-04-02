@@ -1,6 +1,6 @@
 {
   "name": "Gmail",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A Gmail Electron wrapper",
   "main": "main.js",
   "scripts": {
@@ -9,12 +9,12 @@
   "keywords": [
     "Electron",
     "Google",
-    "Keep",
-    "computc"
+    "Mail",
+    "Gmail"
   ],
   "author": "oitsjustjose",
   "license": "CC0-1.0",
   "devDependencies": {
-    "electron": "~1.8.2-beta5"
+    "electron": "^4.1.3"
   }
 }
