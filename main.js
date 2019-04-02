@@ -1,22 +1,16 @@
-const electron = require('electron')
+const electron = require('electron');
 // Module to control application life.
-const app = electron.app
+const app = electron.app;
 // Module to create native browser window.
-const BrowserWindow = electron.BrowserWindow
-const Menu = electron.Menu
-const path = require('path')
-const url = require('url')
-const shell = require('electron').shell
-const ipc = require('electron').ipcMain;
+const BrowserWindow = electron.BrowserWindow;
+const Menu = electron.Menu;
+const path = require('path');
+const url = require('url');
+const shell = require('electron').shell;
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
-
-ipc.on('reply', (event, message) => {
-  console.log(event, message);
-  mainWindow.webContents.send('messageFromMain', `This is the message from the second window: ${message}`);
-});
 
 function createMenu() {
   var template = [{
@@ -124,16 +118,28 @@ function createWindow() {
     height: 600,
     titleBarStyle: 'hidden',
     title: 'Gmail',
-    icon: __dirname + '/icon.png'
-  })
+    icon: __dirname + '/icon.png',
+  });
 
   mainWindow.loadURL(url.format({
     pathname: path.join(__dirname, 'index.html'),
     protocol: 'file:',
     slashes: true
-  }))
+  }));
 
-  mainWindow.on('closed', function () {})
+  mainWindow.on('closed', function (event) {
+    event.preventDefault();
+  });
+
+  mainWindow.webContents.on('new-window', function (e, url) {
+    e.preventDefault();
+    if (url.indexOf("mail.google.com") != -1) {
+      mainWindow.loadURL(url);
+      mainWindow.webContents.session.flushStorageData();
+    } else {
+      shell.openExternal(url);
+    }
+  });
 
   mainWindow.setMenu(null);
 }
@@ -169,14 +175,18 @@ app.on('web-contents-created', (e, contents) => {
 app.on('window-all-closed', function () {
   mainWindow.webContents.session.flushStorageData();
   if (process.platform !== 'darwin') {
+
     app.quit();
   } else {
     mainWindow = null;
+
   }
 });
 
 app.on('activate', function () {
+
   if (mainWindow === null) {
     createWindow();
+    createMenu();
   }
 });
