@@ -133,8 +133,7 @@ function createWindow() {
     slashes: true
   }))
 
-  mainWindow.on('closed', function () {
-  })
+  mainWindow.on('closed', function () {})
 
   mainWindow.setMenu(null);
 }
@@ -168,10 +167,12 @@ app.on('web-contents-created', (e, contents) => {
 });
 
 app.on('window-all-closed', function () {
+  mainWindow.webContents.session.flushStorageData();
   if (process.platform !== 'darwin') {
     app.quit();
+  } else {
+    mainWindow = null;
   }
-  mainWindow.webContents.session.flushStorageData();
 });
 
 app.on('activate', function () {
