@@ -1,13 +1,10 @@
 const electron = require('electron');
-// Module to control application life.
-const app = electron.app;
-// Module to create native browser window.
-const BrowserWindow = electron.BrowserWindow;
-const Menu = electron.Menu;
 const path = require('path');
 const url = require('url');
 const shell = require('electron').shell;
-
+const app = electron.app;
+const Menu = electron.Menu;
+const BrowserWindow = electron.BrowserWindow;
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
@@ -50,12 +47,12 @@ function createMenu() {
       label: 'Edit',
       submenu: [{
           label: 'Undo',
-          accelerator: 'Command+Z',
+          accelerator: 'CmdOrCtrl+Z',
           selector: 'undo:'
         },
         {
           label: 'Redo',
-          accelerator: 'Shift+Command+Z',
+          accelerator: 'Shift+CmdOrCtrl+Z',
           selector: 'redo:'
         },
         {
@@ -63,36 +60,86 @@ function createMenu() {
         },
         {
           label: 'Cut',
-          accelerator: 'Command+X',
+          accelerator: 'CmdOrCtrl+X',
           selector: 'cut:'
         },
         {
           label: 'Copy',
-          accelerator: 'Command+C',
+          accelerator: 'CmdOrCtrl+C',
           selector: 'copy:'
         },
         {
           label: 'Paste',
-          accelerator: 'Command+V',
+          accelerator: 'CmdOrCtrl+V',
           selector: 'paste:'
         },
         {
           label: 'Select All',
-          accelerator: 'Command+A',
+          accelerator: 'CmdOrCtrl+A',
           selector: 'selectAll:'
         }
       ]
     },
     {
+      label: 'View',
+      submenu: [{
+          role: 'toggledevtools'
+        },
+        {
+          type: 'separator'
+        },
+        {
+          role: 'resetzoom'
+        },
+        {
+          role: 'zoomin'
+        },
+        {
+          role: 'zoomout'
+        },
+        {
+          type: 'separator'
+        },
+        {
+          role: 'togglefullscreen'
+        }
+      ]
+    },
+    {
+      label: 'Go',
+      submenu: [{
+        label: 'Back',
+        accelerator: 'CmdOrCtrl+Left',
+        click: () => {
+          mainWindow.webContents.send('back');
+        }
+      }, {
+        label: 'Forward',
+        accelerator: 'CmdOrCtrl+Right',
+        click: () => {
+          mainWindow.webContents.send('forward');
+        }
+      }, {
+        label: 'Home',
+        click: () => {
+          mainWindow.webContents.send('home');
+        }
+      }, {
+        role: 'reload'
+      }, {
+        role: 'forcereload'
+      }]
+    },
+    {
       label: 'Window',
       submenu: [{
           label: 'Minimize',
-          accelerator: 'Command+M',
+          accelerator: 'CmdOrCtrl+M',
           selector: 'performMiniaturize:'
         },
         {
           label: 'Close',
-          accelerator: 'Command+W',
+          accelerator: 'CmdOrCtrl+W',
           selector: 'performClose:'
         },
         {
@@ -103,7 +150,7 @@ function createMenu() {
           selector: 'arrangeInFront:'
         },
       ]
-    },
+    }
   ];
 
   var menu = Menu.buildFromTemplate(template);
@@ -114,11 +161,13 @@ function createMenu() {
 function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
+    title: 'Gmail',
     width: 800,
     height: 600,
+    frame: false,
     titleBarStyle: 'hidden',
-    title: 'Gmail',
-    icon: __dirname + '/icon.png',
+    icon: __dirname + './assets/icons/mac/gmail.icns',
+    show: false,
   });
 
   mainWindow.loadURL(url.format({
@@ -134,59 +183,53 @@ function createWindow() {
   mainWindow.webContents.on('new-window', function (e, url) {
     e.preventDefault();
     if (url.indexOf("mail.google.com") != -1) {
-      mainWindow.loadURL(url);
+      mainWindow.webContents.send('changeURL', url);
       mainWindow.webContents.session.flushStorageData();
     } else {
       shell.openExternal(url);
     }
   });
 
+  mainWindow.once('ready-to-show', () => {
+    mainWindow.show();
+  });
+
   mainWindow.setMenu(null);
 }
 
-app.on('ready', function () {
-  createWindow();
-  createMenu();
-});
+function init() {
+  app.on('web-contents-created', (e, contents) => {
+    if (contents.getType() == 'webview') {
+      contents.on('new-window', (e, url) => {
+        e.preventDefault();
+        if (url.indexOf("mail.google.com") != -1) {
+          mainWindow.webContents.send('changeURL', url);
+          mainWindow.webContents.session.flushStorageData();
+        } else {
+          shell.openExternal(url);
+        }
+      });
+      contents.on('will-navigate', (e, url) => {
+        e.preventDefault();
+        if (url.indexOf("mail.google.com") != -1) {
+          mainWindow.webContents.send('changeURL', url);
+          mainWindow.webContents.session.flushStorageData();
+        } else {
+          shell.openExternal(url);
+        }
+      });
+    }
+  });
 
-app.on('web-contents-created', (e, contents) => {
-  if (contents.getType() == 'webview') {
-    contents.on('new-window', (e, url) => {
-      e.preventDefault();
-      if (url.indexOf("google") != -1) {
-        mainWindow.loadURL(url);
-        mainWindow.webContents.session.flushStorageData();
-      } else {
-        shell.openExternal(url);
-      }
-    });
-    contents.on('will-navigate', (e, url) => {
-      e.preventDefault();
-      if (url.indexOf("google") != -1) {
-        mainWindow.loadURL(url);
-        mainWindow.webContents.session.flushStorageData();
-      } else {
-        shell.openExternal(url);
-      }
-    });
-  }
-});
-
-app.on('window-all-closed', function () {
-  mainWindow.webContents.session.flushStorageData();
-  if (process.platform !== 'darwin') {
-
+  app.on('window-all-closed', function () {
+    mainWindow.webContents.session.flushStorageData();
     app.quit();
-  } else {
-    mainWindow = null;
+  });
 
-  }
-});
-
-app.on('activate', function () {
-
-  if (mainWindow === null) {
+  app.on('ready', function () {
     createWindow();
     createMenu();
-  }
-});
+  });
+}
+
+init();
