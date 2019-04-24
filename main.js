@@ -8,6 +8,8 @@ const BrowserWindow = electron.BrowserWindow;
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
+let focusedWindow;
+let children = [];
 
 function createMenu() {
   var template = [{
@@ -49,8 +51,7 @@ function createMenu() {
           label: 'New Window',
           accelerator: 'CmdOrCtrl+N',
           click: () => {
-            createWindow();
-            createMenu();
+            createChildWindow();
           }
         },
         {
@@ -60,7 +61,7 @@ function createMenu() {
           label: 'Print',
           accelerator: 'CmdOrCtrl+P',
           click: () => {
-            mainWindow.webContents.send('print')
+            focusedWindow.webContents.send('print');
           }
         }
       ]
@@ -134,20 +135,20 @@ function createMenu() {
         label: 'Back',
         accelerator: 'CmdOrCtrl+Left',
         click: () => {
-          mainWindow.webContents.send('back');
+          focusedWindow.webContents.send('back');
         }
       }, {
         label: 'Forward',
         accelerator: 'CmdOrCtrl+Right',
         click: () => {
-          mainWindow.webContents.send('forward');
+          focusedWindow.webContents.send('forward');
         }
       }, {
         type: 'separator'
       }, {
         label: 'Home',
         click: () => {
-          mainWindow.webContents.send('home');
+          focusedWindow.webContents.send('home');
         }
       }, {
         type: 'separator'
@@ -183,6 +184,49 @@ function createMenu() {
   var menu = Menu.buildFromTemplate(template);
 
   Menu.setApplicationMenu(menu); // Must be called within app.on('ready', function(){ ... });
+}
+
+
+function createChildWindow() {
+  // Create the browser window.
+  child = new BrowserWindow({
+    title: 'Gmail',
+    width: 800,
+    height: 600,
+    frame: false,
+    titleBarStyle: 'hidden',
+    icon: __dirname + './assets/icons/mac/gmail.icns',
+    show: false,
+    parent: mainWindow
+  });
+
+  child.setAlwaysOnTop(false);
+
+  child.loadURL(url.format({
+    pathname: path.join(__dirname, 'index.html'),
+    protocol: 'file:',
+    slashes: true
+  }));
+
+  child.on('closed', function (event) {
+    event.preventDefault();
+  });
+
+  child.webContents.on('new-window', function (e, url) {
+    e.preventDefault();
+    if (url.indexOf("mail.google.com") != -1) {
+      child.webContents.send('changeURL', url);
+      child.webContents.session.flushStorageData();
+    } else {
+      shell.openExternal(url);
+    }
+  });
+
+  child.once('ready-to-show', () => {
+    child.show();
+  });
+
+  children.push(child);
 }
 
 function createWindow() {
@@ -221,17 +265,19 @@ function createWindow() {
     mainWindow.show();
   });
 
-  mainWindow.setMenu(null);
+  focusedWindow = mainWindow;
 }
 
 function init() {
+  app.setName("Gmail");
+
   app.on('web-contents-created', (e, contents) => {
     if (contents.getType() == 'webview') {
       contents.on('new-window', (e, url) => {
         e.preventDefault();
         if (url.indexOf("mail.google.com") != -1) {
-          mainWindow.webContents.send('changeURL', url);
-          mainWindow.webContents.session.flushStorageData();
+          focusedWindow.webContents.send('changeURL', url);
+          focusedWindow.webContents.session.flushStorageData();
         } else {
           shell.openExternal(url);
         }
@@ -239,13 +285,26 @@ function init() {
       contents.on('will-navigate', (e, url) => {
         e.preventDefault();
         if (url.indexOf("mail.google.com") != -1) {
-          mainWindow.webContents.send('changeURL', url);
-          mainWindow.webContents.session.flushStorageData();
+          focusedWindow.webContents.send('changeURL', url);
+          focusedWindow.webContents.session.flushStorageData();
         } else {
           shell.openExternal(url);
         }
       });
     }
+  });
+
+  app.on('browser-window-focus', (event, window) => {
+    focusedWindow = window;
+    focusedWindow.webContents.on('new-window', function (e, url) {
+      e.preventDefault();
+      if (url.indexOf("mail.google.com") != -1) {
+        focusedWindow.webContents.send('changeURL', url);
+        focusedWindow.webContents.session.flushStorageData();
+      } else {
+        shell.openExternal(url);
+      }
+    });
   });
 
   app.on('window-all-closed', function () {
