@@ -1,4 +1,6 @@
-const { ipcRenderer } = require('electron');
+const {
+    ipcRenderer
+} = require('electron');
 
 ipcRenderer.on('back', () => {
     window.history.back();
@@ -14,4 +16,8 @@ ipcRenderer.on('home', () => {
 
 ipcRenderer.on('changeURL', (event, url) => {
     document.getElementById("webview").loadURL(url);
+});
+
+ipcRenderer.on('print', () => {
+    document.getElementById("webview").print();
 });

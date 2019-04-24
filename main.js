@@ -44,6 +44,28 @@ function createMenu() {
       ]
     },
     {
+      label: 'File',
+      submenu: [{
+          label: 'New Window',
+          accelerator: 'CmdOrCtrl+N',
+          click: () => {
+            createWindow();
+            createMenu();
+          }
+        },
+        {
+          type: 'separator'
+        },
+        {
+          label: 'Print',
+          accelerator: 'CmdOrCtrl+P',
+          click: () => {
+            mainWindow.webContents.send('print')
+          }
+        }
+      ]
+    },
+    {
       label: 'Edit',
       submenu: [{
           label: 'Undo',
@@ -83,7 +105,8 @@ function createMenu() {
     {
       label: 'View',
       submenu: [{
-          role: 'toggledevtools'
+          role: 'toggledevtools',
+          accelerator: "F11"
         },
         {
           type: 'separator'
@@ -120,10 +143,14 @@ function createMenu() {
           mainWindow.webContents.send('forward');
         }
       }, {
+        type: 'separator'
+      }, {
         label: 'Home',
         click: () => {
           mainWindow.webContents.send('home');
         }
+      }, {
+        type: 'separator'
       }, {
         role: 'reload'
       }, {
