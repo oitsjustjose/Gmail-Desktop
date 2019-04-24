@@ -308,7 +308,7 @@ function init() {
   });
 
   app.on('window-all-closed', function () {
-    mainWindow.webContents.session.flushStorageData();
+    focusedWindow.webContents.session.flushStorageData();
     app.quit();
   });
 
