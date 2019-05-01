@@ -21,187 +21,306 @@ let focusedWindow;
 let children = [];
 let children_have_parent;
 
-function createMenu() {
+function otherMenu() {
   var template = [{
-      label: 'Gmail',
-      submenu: [{
-          label: 'About Gmail',
-          role: 'about'
-        },
-        {
-          type: 'separator'
-        },
-        {
-          role: 'services',
-          submenu: []
-        },
-        {
-          type: 'separator'
-        },
-        {
-          role: 'hide'
-        },
-        {
-          role: 'hideothers'
-        },
-        {
-          role: 'unhide'
-        },
-        {
-          type: 'separator'
-        },
-        {
-          role: 'quit'
-        }
-      ]
+    label: 'File',
+    submenu: [{
+      label: 'New Window',
+      accelerator: 'CmdOrCtrl+N',
+      click: () => {
+        createChildWindow();
+      }
     },
     {
-      label: 'File',
-      submenu: [{
-          label: 'New Window',
-          accelerator: 'CmdOrCtrl+N',
-          click: () => {
-            createChildWindow();
-          }
-        },
-        {
-          type: 'separator'
-        },
-        {
-          label: 'Print',
-          accelerator: 'CmdOrCtrl+P',
-          click: () => {
-            focusedWindow.webContents.send('print');
-          }
-        }
-      ]
+      type: 'separator'
     },
     {
-      label: 'Edit',
-      submenu: [{
-          label: 'Undo',
-          accelerator: 'CmdOrCtrl+Z',
-          selector: 'undo:'
-        },
-        {
-          label: 'Redo',
-          accelerator: 'Shift+CmdOrCtrl+Z',
-          selector: 'redo:'
-        },
-        {
-          type: 'separator'
-        },
-        {
-          label: 'Cut',
-          accelerator: 'CmdOrCtrl+X',
-          selector: 'cut:'
-        },
-        {
-          label: 'Copy',
-          accelerator: 'CmdOrCtrl+C',
-          selector: 'copy:'
-        },
-        {
-          label: 'Paste',
-          accelerator: 'CmdOrCtrl+V',
-          selector: 'paste:'
-        },
-        {
-          label: 'Select All',
-          accelerator: 'CmdOrCtrl+A',
-          selector: 'selectAll:'
-        }
-      ]
-    },
-    {
-      label: 'View',
-      submenu: [{
-          role: 'toggledevtools',
-          accelerator: "F11"
-        },
-        {
-          type: 'separator'
-        },
-        {
-          role: 'resetzoom'
-        },
-        {
-          role: 'zoomin'
-        },
-        {
-          role: 'zoomout'
-        },
-        {
-          type: 'separator'
-        },
-        {
-          role: 'togglefullscreen'
-        }
-      ]
-    },
-    {
-      label: 'Go',
-      submenu: [{
-        label: 'Back',
-        accelerator: 'CmdOrCtrl+Left',
-        click: () => {
-          focusedWindow.webContents.send('back');
-        }
-      }, {
-        label: 'Forward',
-        accelerator: 'CmdOrCtrl+Right',
-        click: () => {
-          focusedWindow.webContents.send('forward');
-        }
-      }, {
-        type: 'separator'
-      }, {
-        label: 'Home',
-        click: () => {
-          focusedWindow.webContents.send('home');
-        }
-      }, {
-        type: 'separator'
-      }, {
-        role: 'reload'
-      }, {
-        role: 'forcereload'
-      }]
-    },
-    {
-      label: 'Window',
-      submenu: [{
-          label: 'Minimize',
-          accelerator: 'CmdOrCtrl+M',
-          selector: 'performMiniaturize:'
-        },
-        {
-          label: 'Close',
-          accelerator: 'CmdOrCtrl+W',
-          selector: 'performClose:'
-        },
-        {
-          type: 'separator'
-        },
-        {
-          label: 'Bring All to Front',
-          selector: 'arrangeInFront:'
-        },
-        {
-          label: 'Group Windows Together',
-          sublabel: 'Selecting this uses the main window as a parent, grouping windows together but may cause some odd (but not broken) behavior',
-          type: 'checkbox',
-          checked: children_have_parent,
-          click: () => {
-            children_have_parent = !children_have_parent;
-            store.set("children_have_parent", children_have_parent);
-            for(var i in children) {
-              children[i].setParentWindow(null);
-            }
-          }
-        }
-      ]
+      label: 'Print',
+      accelerator: 'CmdOrCtrl+P',
+      click: () => {
+        focusedWindow.webContents.send('print');
+      }
     }
+    ]
+  },
+  {
+    label: 'Edit',
+    submenu: [{
+      label: 'Undo',
+      accelerator: 'CmdOrCtrl+Z',
+      selector: 'undo:'
+    },
+    {
+      label: 'Redo',
+      accelerator: 'Shift+CmdOrCtrl+Z',
+      selector: 'redo:'
+    },
+    {
+      type: 'separator'
+    },
+    {
+      label: 'Cut',
+      accelerator: 'CmdOrCtrl+X',
+      selector: 'cut:'
+    },
+    {
+      label: 'Copy',
+      accelerator: 'CmdOrCtrl+C',
+      selector: 'copy:'
+    },
+    {
+      label: 'Paste',
+      accelerator: 'CmdOrCtrl+V',
+      selector: 'paste:'
+    },
+    {
+      label: 'Select All',
+      accelerator: 'CmdOrCtrl+A',
+      selector: 'selectAll:'
+    }
+    ]
+  },
+  {
+    label: 'View',
+    submenu: [{
+      role: 'toggledevtools'
+    },
+    {
+      type: 'separator'
+    },
+    {
+      role: 'resetzoom'
+    },
+    {
+      role: 'zoomin'
+    },
+    {
+      role: 'zoomout'
+    },
+    {
+      type: 'separator'
+    },
+    {
+      role: 'togglefullscreen'
+    }
+    ]
+  },
+  {
+    label: 'Go',
+    submenu: [{
+      label: 'Back',
+      accelerator: 'CmdOrCtrl+Left',
+      click: () => {
+        focusedWindow.webContents.send('back');
+      }
+    }, {
+      label: 'Forward',
+      accelerator: 'CmdOrCtrl+Right',
+      click: () => {
+        focusedWindow.webContents.send('forward');
+      }
+    }, {
+      type: 'separator'
+    }, {
+      label: 'Home',
+      click: () => {
+        focusedWindow.webContents.send('home');
+      }
+    }, {
+      type: 'separator'
+    }, {
+      role: 'reload'
+    }, {
+      role: 'forcereload'
+    }]
+  }
+  ];
+
+  var menu = Menu.buildFromTemplate(template);
+
+  Menu.setApplicationMenu(menu); // Must be called within app.on('ready', function(){ ... });
+}
+
+function macOSMenu() {
+  var template = [{
+    label: 'Gmail',
+    submenu: [{
+      label: 'About Gmail',
+      role: 'about'
+    },
+    {
+      type: 'separator'
+    },
+    {
+      role: 'services',
+      submenu: []
+    },
+    {
+      type: 'separator'
+    },
+    {
+      role: 'hide'
+    },
+    {
+      role: 'hideothers'
+    },
+    {
+      role: 'unhide'
+    },
+    {
+      type: 'separator'
+    },
+    {
+      role: 'quit'
+    }
+    ]
+  },
+  {
+    label: 'File',
+    submenu: [{
+      label: 'New Window',
+      accelerator: 'CmdOrCtrl+N',
+      click: () => {
+        createChildWindow();
+      }
+    },
+    {
+      type: 'separator'
+    },
+    {
+      label: 'Print',
+      accelerator: 'CmdOrCtrl+P',
+      click: () => {
+        focusedWindow.webContents.send('print');
+      }
+    }
+    ]
+  },
+  {
+    label: 'Edit',
+    submenu: [{
+      label: 'Undo',
+      accelerator: 'CmdOrCtrl+Z',
+      selector: 'undo:'
+    },
+    {
+      label: 'Redo',
+      accelerator: 'Shift+CmdOrCtrl+Z',
+      selector: 'redo:'
+    },
+    {
+      type: 'separator'
+    },
+    {
+      label: 'Cut',
+      accelerator: 'CmdOrCtrl+X',
+      selector: 'cut:'
+    },
+    {
+      label: 'Copy',
+      accelerator: 'CmdOrCtrl+C',
+      selector: 'copy:'
+    },
+    {
+      label: 'Paste',
+      accelerator: 'CmdOrCtrl+V',
+      selector: 'paste:'
+    },
+    {
+      label: 'Select All',
+      accelerator: 'CmdOrCtrl+A',
+      selector: 'selectAll:'
+    }
+    ]
+  },
+  {
+    label: 'View',
+    submenu: [{
+      role: 'toggledevtools'
+    },
+    {
+      type: 'separator'
+    },
+    {
+      role: 'resetzoom'
+    },
+    {
+      role: 'zoomin'
+    },
+    {
+      role: 'zoomout'
+    },
+    {
+      type: 'separator'
+    },
+    {
+      role: 'togglefullscreen'
+    }
+    ]
+  },
+  {
+    label: 'Go',
+    submenu: [{
+      label: 'Back',
+      accelerator: 'CmdOrCtrl+Left',
+      click: () => {
+        focusedWindow.webContents.send('back');
+      }
+    }, {
+      label: 'Forward',
+      accelerator: 'CmdOrCtrl+Right',
+      click: () => {
+        focusedWindow.webContents.send('forward');
+      }
+    }, {
+      type: 'separator'
+    }, {
+      label: 'Home',
+      click: () => {
+        focusedWindow.webContents.send('home');
+      }
+    }, {
+      type: 'separator'
+    }, {
+      role: 'reload'
+    }, {
+      role: 'forcereload'
+    }]
+  },
+  {
+    label: 'Window',
+    submenu: [{
+      label: 'Minimize',
+      accelerator: 'CmdOrCtrl+M',
+      selector: 'performMiniaturize:'
+    },
+    {
+      label: 'Close',
+      accelerator: 'CmdOrCtrl+W',
+      selector: 'performClose:'
+    },
+    {
+      type: 'separator'
+    },
+    {
+      label: 'Bring All to Front',
+      selector: 'arrangeInFront:'
+    },
+    {
+      label: 'Group Windows Together',
+      sublabel: 'Selecting this uses the main window as a parent, grouping windows together but may cause some odd (but not broken) behavior',
+      type: 'checkbox',
+      checked: children_have_parent,
+      click: () => {
+        children_have_parent = !children_have_parent;
+        store.set("children_have_parent", children_have_parent);
+        for (var i in children) {
+          children[i].setParentWindow(children_have_parent ? mainWindow : null);
+        }
+      }
+    }
+    ]
+  }
   ];
 
   var menu = Menu.buildFromTemplate(template);
@@ -216,15 +335,14 @@ function createChildWindow() {
     title: 'Gmail',
     width: 800,
     height: 600,
-    frame: false,
-    titleBarStyle: 'hidden',
-    icon: __dirname + './assets/icons/mac/gmail.icns',
-    show: false
+    frame: process.platform != "darwin",
+    titleBarStyle: process.platform == "darwin" ? 'hidden' : 'default',
+    icon: __dirname + './assets/icons/png/gmail.png',
+    show: process.platform != "darwin",
+    nodeIntegration: true,
+    parent: children_have_parent ? mainWindow : null
   });
 
-  if (children_have_parent) {
-    child.setParentWindow(mainWindow);
-  }
 
   child.setAlwaysOnTop(false);
 
@@ -261,10 +379,11 @@ function createWindow() {
     title: 'Gmail',
     width: 800,
     height: 600,
-    frame: false,
-    titleBarStyle: 'hidden',
-    icon: __dirname + './assets/icons/mac/gmail.icns',
-    show: false,
+    frame: process.platform != "darwin",
+    titleBarStyle: process.platform == "darwin" ? 'hidden' : 'default',
+    icon: __dirname + './assets/icons/png/gmail.png',
+    show: process.platform != "darwin",
+    nodeIntegration: true
   });
 
   mainWindow.loadURL(url.format({
@@ -341,7 +460,8 @@ function init() {
   app.on('ready', function () {
     children_have_parent = store.get("children_have_parent");
     createWindow();
-    createMenu();
+    // Dynamically pick a menu-type
+    if (process.platform == "darwin") { macOSMenu() } else { otherMenu() }
   });
 }
 
