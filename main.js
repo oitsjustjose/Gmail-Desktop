@@ -2,14 +2,24 @@ const electron = require('electron');
 const path = require('path');
 const url = require('url');
 const shell = require('electron').shell;
+const Store = require('./store.js');
 const app = electron.app;
 const Menu = electron.Menu;
 const BrowserWindow = electron.BrowserWindow;
+
+const store = new Store({
+  configName: "user-preferences",
+  defaults: {
+    "children_have_parent": false
+  }
+});
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
 let focusedWindow;
 let children = [];
+let children_have_parent;
 
 function createMenu() {
   var template = [{
@@ -177,6 +187,19 @@ function createMenu() {
           label: 'Bring All to Front',
           selector: 'arrangeInFront:'
         },
+        {
+          label: 'Group Windows Together',
+          sublabel: 'Selecting this uses the main window as a parent, grouping windows together but may cause some odd (but not broken) behavior',
+          type: 'checkbox',
+          checked: children_have_parent,
+          click: () => {
+            children_have_parent = !children_have_parent;
+            store.set("children_have_parent", children_have_parent);
+            for(var i in children) {
+              children[i].setParentWindow(null);
+            }
+          }
+        }
       ]
     }
   ];
@@ -196,9 +219,12 @@ function createChildWindow() {
     frame: false,
     titleBarStyle: 'hidden',
     icon: __dirname + './assets/icons/mac/gmail.icns',
-    show: false,
-    parent: mainWindow
+    show: false
   });
+
+  if (children_have_parent) {
+    child.setParentWindow(mainWindow);
+  }
 
   child.setAlwaysOnTop(false);
 
@@ -313,6 +339,7 @@ function init() {
   });
 
   app.on('ready', function () {
+    children_have_parent = store.get("children_have_parent");
     createWindow();
     createMenu();
   });
