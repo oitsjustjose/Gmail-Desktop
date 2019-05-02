@@ -21,3 +21,8 @@ ipcRenderer.on('changeURL', (event, url) => {
 ipcRenderer.on('print', () => {
     document.getElementById("webview").print();
 });
+
+document.getElementById("webview").addEventListener("dom-ready", event => {
+    webview.blur();
+    webview.focus();
+});
