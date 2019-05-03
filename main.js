@@ -11,7 +11,7 @@ const contextMenu = require('electron-context-menu');
 
 contextMenu({
   shouldShowMenu: true,
-  showInspectElement: true
+  showInspectElement: false
 });
 
 const store = new Store({
@@ -328,7 +328,8 @@ function createWindow(isChild) {
       nodeIntegration: false,
       nativeWindowOpen: true,
       preload: path.join(__dirname, 'preload')
-    }
+    },
+    transparent: true
   });
 
   if (isChild) {
@@ -362,6 +363,7 @@ function createWindow(isChild) {
 
   win.once('ready-to-show', () => {
     win.show();
+    win.focus();
   });
 
   ipc.on('unread-count', (evt, unreadCount) => {
@@ -409,42 +411,6 @@ function addCustomCSS(windowElement) {
 function init() {
   app.setName("Gmail");
 
-  app.on('web-contents-created', (e, contents) => {
-    if (contents.getType() == 'webview') {
-      contents.on('new-window', (e, url) => {
-        e.preventDefault();
-        if (url.indexOf("mail.google.com") != -1) {
-          focusedWindow.webContents.send('changeURL', url);
-          focusedWindow.webContents.session.flushStorageData();
-        } else {
-          shell.openExternal(url);
-        }
-      });
-      contents.on('will-navigate', (e, url) => {
-        e.preventDefault();
-        if (url.indexOf("mail.google.com") != -1) {
-          focusedWindow.webContents.send('changeURL', url);
-          focusedWindow.webContents.session.flushStorageData();
-        } else {
-          shell.openExternal(url);
-        }
-      });
-    }
-  });
-
-  app.on('browser-window-focus', (event, window) => {
-    focusedWindow = window;
-    focusedWindow.webContents.on('new-window', function (e, url) {
-      e.preventDefault();
-      if (url.indexOf("mail.google.com") != -1) {
-        focusedWindow.webContents.send('changeURL', url);
-        focusedWindow.webContents.session.flushStorageData();
-      } else {
-        shell.openExternal(url);
-      }
-    });
-  });
-
   app.on('window-all-closed', function () {
     focusedWindow.webContents.session.flushStorageData();
     app.quit();
@@ -456,7 +422,16 @@ function init() {
   });
 
   app.on('ready', function () {
+    if(process.platform == "darwin" && !app.isInApplicationsFolder) {
+      didMove = app.moveToApplicationsFolder();
+      if(!didMove){
+        alert("Couldn't move the app to the Applications folder automatically\nPlease do this yourself!")
+      }
+    }
     children_have_parent = store.get("children_have_parent");
+    if (process.platform == "darwin") {
+      app.dock.bounce("critical");
+    }
     createWindow(false);
     // Dynamically pick a menu-type
     if (process.platform == "darwin") {
