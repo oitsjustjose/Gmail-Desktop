@@ -418,14 +418,16 @@ function init() {
 
   app.on('open-url', (event, url) => {
     event.preventDefault();
-    createMailto(url);
+    app.on('ready', function () {
+      createMailto(url);
+    });
   });
 
   app.on('ready', function () {
-    if(process.platform == "darwin" && !app.isInApplicationsFolder) {
+    if (process.platform == "darwin" && !app.isInApplicationsFolder) {
       didMove = app.moveToApplicationsFolder();
-      if(!didMove){
-        alert("Couldn't move the app to the Applications folder automatically\nPlease do this yourself!")
+      if (!didMove) {
+        alert("Couldn't move the app to the Applications folder automatically\nPlease do this yourself!");
       }
     }
     children_have_parent = store.get("children_have_parent");
