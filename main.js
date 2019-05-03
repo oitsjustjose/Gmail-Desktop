@@ -352,7 +352,8 @@ function createWindow(isChild) {
   win.webContents.on('new-window', function (e, url) {
     e.preventDefault();
     if (url.indexOf("mail.google.com") != -1) {
-      win.webContents.send('changeURL', url);
+      win.loadURL(url);
+      addCustomCSS(win);
       win.webContents.session.flushStorageData();
     } else {
       shell.openExternal(url);
