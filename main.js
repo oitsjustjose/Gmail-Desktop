@@ -9,6 +9,10 @@ const fs = require('fs');
 const ipc = require('electron').ipcMain;
 const contextMenu = require('electron-context-menu');
 
+contextMenu({
+  shouldShowMenu: true,
+  showInspectElement: true
+});
 
 const store = new Store({
   configName: "user-preferences",
@@ -32,21 +36,18 @@ function otherMenu() {
           click: () => {
             createWindow(true);
           }
-        },
-        {
+        }, {
           type: 'separator'
         },
         {
           label: 'Print',
           accelerator: 'CmdOrCtrl+P',
           click: () => {
-            focusedWindow.webContents.send('print');
+            window.webContents.print({
+              "printBackground": true
+            });
           }
-        },
-        {
-          type: 'separator'
-        },
-        {
+        }, {
           label: 'Make Default Mail App',
           type: 'checkbox',
           checked: app.isDefaultProtocolClient('mailto'),
@@ -125,27 +126,6 @@ function otherMenu() {
     {
       label: 'Go',
       submenu: [{
-        label: 'Back',
-        accelerator: 'CmdOrCtrl+Left',
-        click: () => {
-          focusedWindow.webContents.send('back');
-        }
-      }, {
-        label: 'Forward',
-        accelerator: 'CmdOrCtrl+Right',
-        click: () => {
-          focusedWindow.webContents.send('forward');
-        }
-      }, {
-        type: 'separator'
-      }, {
-        label: 'Home',
-        click: () => {
-          focusedWindow.webContents.send('home');
-        }
-      }, {
-        type: 'separator'
-      }, {
         role: 'reload'
       }, {
         role: 'forcereload'
@@ -208,15 +188,16 @@ function macOSMenu() {
           click: () => {
             createWindow(true);
           }
-        },
-        {
+        }, {
           type: 'separator'
         },
         {
           label: 'Print',
           accelerator: 'CmdOrCtrl+P',
           click: () => {
-            focusedWindow.webContents.send('print');
+            window.webContents.print({
+              "printBackground": true
+            });
           }
         }
       ]
@@ -286,27 +267,6 @@ function macOSMenu() {
     {
       label: 'Go',
       submenu: [{
-        label: 'Back',
-        accelerator: 'CmdOrCtrl+Left',
-        click: () => {
-          focusedWindow.webContents.send('back');
-        }
-      }, {
-        label: 'Forward',
-        accelerator: 'CmdOrCtrl+Right',
-        click: () => {
-          focusedWindow.webContents.send('forward');
-        }
-      }, {
-        type: 'separator'
-      }, {
-        label: 'Home',
-        click: () => {
-          focusedWindow.webContents.send('home');
-        }
-      }, {
-        type: 'separator'
-      }, {
         role: 'reload'
       }, {
         role: 'forcereload'
@@ -355,9 +315,8 @@ function macOSMenu() {
 
 function createWindow(isChild) {
 
-
   // Create the browser window.
-  window = new BrowserWindow({
+  win = new BrowserWindow({
     title: 'Gmail',
     width: 800,
     height: 600,
@@ -374,48 +333,47 @@ function createWindow(isChild) {
 
   if (isChild) {
     if (children_have_parent) {
-      window.setParentWindow(mainWindow);
+      win.setParentWindow(mainWindow);
     }
-    window.loadURL("https://mail.google.com/mail/u/" + accountNumber);
+    win.loadURL("https://mail.google.com/mail/u/" + accountNumber);
     accountNumber++;
   } else {
-    window.loadURL("https://mail.google.com/");
+    win.loadURL("https://mail.google.com/");
   }
 
-  window.webContents.on('dom-ready', () => {
-    addCustomCSS(window);
-  })
+  win.webContents.on('dom-ready', () => {
+    addCustomCSS(win);
+  });
 
-  window.on('closed', function (event) {
+  win.on('closed', function (event) {
     event.preventDefault();
   });
 
-  window.webContents.on('new-window', function (e, url) {
+  win.webContents.on('new-window', function (e, url) {
     e.preventDefault();
     if (url.indexOf("mail.google.com") != -1) {
-      window.webContents.send('changeURL', url);
-      window.webContents.session.flushStorageData();
+      win.webContents.send('changeURL', url);
+      win.webContents.session.flushStorageData();
     } else {
       shell.openExternal(url);
     }
   });
 
-  window.once('ready-to-show', () => {
-    window.show();
+  win.once('ready-to-show', () => {
+    win.show();
   });
 
   ipc.on('unread-count', (evt, unreadCount) => {
     if (process.platform == "darwin") {
       app.dock.setBadge(unreadCount ? unreadCount.toString() : '');
     }
-
   });
 
-  focusedWindow = window;
+  focusedWindow = win;
   if (isChild) {
-    children.push(window);
+    children.push(win);
   } else {
-    mainWindow = window;
+    mainWindow = win;
   }
 }
 
@@ -428,7 +386,6 @@ function createMailto(url) {
     `https://mail.google.com/mail/?extsrc=mailto&url=` + url
   );
 }
-
 
 function addCustomCSS(windowElement) {
   platform = process.platform == "darwin" ? "macos" : "";
