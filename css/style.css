@@ -1,0 +1,162 @@
+/* Make titlebar draggable */
+#gb,
+/* Message toolbar in new window */
+body.xE .G-atb,
+/* Compose in new window */
+.Io,
+/* PDF viewer */
+.aLF-aPX-aPU-J6 {
+    -webkit-app-region: drag;
+}
+
+/* Make these elements not draggable */
+/* Hamburger menu */
+.gb_Xb,
+/* Search box */
+.gb_3e,
+/* Account avatar */
+.gb_nc,
+/* Support question mark */
+.gb_ge,
+/* Message toolbar button strip in new window */
+body.xE .G-atb .G-tF,
+/* Minimize compose button in new compose window */
+.Io>.HF,
+/* PDF viewer back button */
+.aLF-aPX-aPU-J6 .aLF-aPX-Jq-I,
+/* PDF viewer right action buttons */
+.aLF-aPX-aPU-J6 .aLF-aPX-aPU-a6I-P6 {
+    -webkit-app-region: no-drag;
+}
+
+/* Google apps */
+#gbwa,
+/* Google notifications */
+#gbwa+div {
+    display: none;
+}
+
+/* Compact Header */
+#gb .gb_gd {
+    padding: 4px;
+}
+
+/* Compact header for new windows */
+body.xE .G-atb {
+    padding-bottom: 6px;
+    padding-top: 6px;
+}
+
+/* Remove Gmail logo */
+.gb_ja:not(.gb_ka) .gb_qc .gb_Rb {
+    display: none !important;
+}
+
+/* Header */
+.gb_lc {
+    height: 32px !important;
+}
+
+.gb_Xb {
+    padding: 2px !important;
+    margin-left: 18px !important;
+}
+
+/* Search box */
+.gb_qc {
+    min-width: 192px !important;
+}
+
+.gb_td.gb_la {
+    margin-top: -3px !important;
+}
+
+.gb_wd.gb_Fd .gb_td .gb_ne {
+    margin-top: 9px !important;
+}
+
+.gb_td,
+.gb_3e,
+.gb_Je {
+    height: 28px !important;
+}
+
+.gb_td button svg,
+.gb_td button img {
+    padding: 2px !important;
+    margin: 0 !important;
+}
+
+.gb_Je {
+    font: normal 14px Roboto, sans-serif !important;
+}
+
+.gssb_e {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+    -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Account avatar */
+.gb_fa>.gb_Ea {
+    padding: 0 !important;
+}
+
+.gb_fa {
+    border: 0 none !important;
+}
+
+.gb_ga {
+    display: none !important;
+}
+
+.gb_nc {
+    text-align: right !important;
+    width: 48px !important;
+}
+
+.gb_mc.gb_Ja.gb_lc {
+    height: 28px !important;
+    margin-top: 1px;
+}
+
+.gb_fa.gb_7f.gb_f {
+    width: 48px !important;
+}
+
+.gb_ja:not(.gb_ka) .gb_fa {
+    width: auto !important;
+    margin-left: 0 !important;
+}
+
+.gb_fa:hover {
+    border: 0x none !important;
+    background-color: transparent !important;
+}
+
+.gb_fa:focus {
+    border: 0 none !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+}
+
+.gb_x:active,
+.gb_x:focus,
+.gb_x:focus:hover {
+    background: transparent none !important;
+}
+
+/* Minimal mode */
+
+/* Footer loading text */
+#stb,
+/* Footer text */
+.aeG,
+/* Support question mark */
+.gb_ge,
+/* Side panel */
+.bAw,
+/* Keyboard button */
+.aBS {
+    display: none;
+}
