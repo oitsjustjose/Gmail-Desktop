@@ -1,4 +1,3 @@
-"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new(P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) {
@@ -121,6 +120,12 @@ var count;
 
 function getUnreadCount() {
     // Find the number next to the inbox label
+    var printButton = document.querySelector('[aria-label="Print all"]');
+    if (printButton !== null) {
+        printButton.onclick = () => {
+            print();
+        };
+    }
     var navigation = document.querySelector('div[role=navigation] [href*="#inbox"]');
     if (navigation) {
         var label = navigation.parentElement.parentElement.querySelector('.bsU');
@@ -131,6 +136,8 @@ function getUnreadCount() {
     }
     return 0;
 }
+
+
 
 function updateUnreadCount() {
     var newCount = getUnreadCount();
@@ -185,6 +192,7 @@ function attachButtonListeners() {
 window.addEventListener('load', function () {
     // Set the initial unread count
     updateUnreadCount();
+    // addPrintListener();
     // Listen to changes to the document title
     var title = document.querySelector('title');
     if (title) {
@@ -199,9 +207,4 @@ window.addEventListener('load', function () {
     // Attaching the button listeners to the buttons
     //   that should close the new window
     attachButtonListeners();
-});
-// Toggle the minimal mode class when a message is
-//   received from the main process
-electron_1.ipcRenderer.on('set-minimal-mode', function (_, enabled) {
-    document.body.classList[enabled ? 'add' : 'remove']('minimal-mode');
 });
