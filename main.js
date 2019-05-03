@@ -1,6 +1,5 @@
 const electron = require('electron');
 const path = require('path');
-const url = require('url');
 const shell = require('electron').shell;
 const Store = require('./store.js');
 const app = electron.app;
@@ -8,6 +7,8 @@ const Menu = electron.Menu;
 const BrowserWindow = electron.BrowserWindow;
 const fs = require('fs');
 const ipc = require('electron').ipcMain;
+const contextMenu = require('electron-context-menu');
+
 
 const store = new Store({
   configName: "user-preferences",
@@ -29,7 +30,7 @@ function otherMenu() {
           label: 'New Window',
           accelerator: 'CmdOrCtrl+N',
           click: () => {
-            createChildWindow();
+            createWindow(true);
           }
         },
         {
@@ -41,7 +42,22 @@ function otherMenu() {
           click: () => {
             focusedWindow.webContents.send('print');
           }
-        }
+        },
+        {
+          type: 'separator'
+        },
+        {
+          label: 'Make Default Mail App',
+          type: 'checkbox',
+          checked: app.isDefaultProtocolClient('mailto'),
+          click() {
+            if (app.isDefaultProtocolClient('mailto')) {
+              app.removeAsDefaultProtocolClient('mailto');
+            } else {
+              app.setAsDefaultProtocolClient('mailto');
+            }
+          }
+        },
       ]
     },
     {
@@ -153,8 +169,16 @@ function macOSMenu() {
           type: 'separator'
         },
         {
-          role: 'services',
-          submenu: []
+          label: 'Make Default Mail App',
+          type: 'checkbox',
+          checked: app.isDefaultProtocolClient('mailto'),
+          click() {
+            if (app.isDefaultProtocolClient('mailto')) {
+              app.removeAsDefaultProtocolClient('mailto');
+            } else {
+              app.setAsDefaultProtocolClient('mailto');
+            }
+          }
         },
         {
           type: 'separator'
@@ -182,7 +206,7 @@ function macOSMenu() {
           label: 'New Window',
           accelerator: 'CmdOrCtrl+N',
           click: () => {
-            createChildWindow();
+            createWindow(true);
           }
         },
         {
@@ -329,66 +353,11 @@ function macOSMenu() {
   Menu.setApplicationMenu(menu); // Must be called within app.on('ready', function(){ ... });
 }
 
+function createWindow(isChild) {
 
-function createChildWindow() {
+
   // Create the browser window.
-  child = new BrowserWindow({
-    title: 'Gmail',
-    width: 800,
-    height: 600,
-    frame: process.platform != "darwin",
-    titleBarStyle: process.platform == "darwin" ? 'hidden' : 'default',
-    icon: __dirname + './assets/icons/png/gmail.png',
-    show: process.platform != "darwin",
-    parent: children_have_parent ? mainWindow : null,
-    webPreferences: {
-      nodeIntegration: false,
-      nativeWindowOpen: true,
-      preload: path.join(__dirname, 'preload')
-    }
-  });
-
-  child.setAlwaysOnTop(false);
-
-  child.webContents.on('dom-ready', () => {
-    addCustomCSS(child);
-  });
-
-  child.loadURL("https://mail.google.com/mail/u/" + accountNumber);
-
-  accountNumber++;
-
-  child.on('closed', function (event) {
-    event.preventDefault();
-  });
-
-  child.webContents.on('new-window', function (e, url) {
-    e.preventDefault();
-    if (url.indexOf("mail.google.com") != -1) {
-      child.webContents.send('changeURL', url);
-      child.webContents.session.flushStorageData();
-    } else {
-      shell.openExternal(url);
-    }
-  });
-
-  child.once('ready-to-show', () => {
-    child.show();
-  });
-
-  ipc.on('unread-count', (evt, unreadCount) => {
-    if (process.platform == "darwin") {
-      app.dock.setBadge(unreadCount ? unreadCount.toString() : '');
-    }
-
-  });
-
-  children.push(child);
-}
-
-function createWindow() {
-  // Create the browser window.
-  mainWindow = new BrowserWindow({
+  window = new BrowserWindow({
     title: 'Gmail',
     width: 800,
     height: 600,
@@ -403,28 +372,36 @@ function createWindow() {
     }
   });
 
-  mainWindow.loadURL("https://mail.google.com/");
+  if (isChild) {
+    if (children_have_parent) {
+      window.setParentWindow(mainWindow);
+    }
+    window.loadURL("https://mail.google.com/mail/u/" + accountNumber);
+    accountNumber++;
+  } else {
+    window.loadURL("https://mail.google.com/");
+  }
 
-  mainWindow.webContents.on('dom-ready', () => {
-    addCustomCSS(mainWindow);
+  window.webContents.on('dom-ready', () => {
+    addCustomCSS(window);
   })
 
-  mainWindow.on('closed', function (event) {
+  window.on('closed', function (event) {
     event.preventDefault();
   });
 
-  mainWindow.webContents.on('new-window', function (e, url) {
+  window.webContents.on('new-window', function (e, url) {
     e.preventDefault();
     if (url.indexOf("mail.google.com") != -1) {
-      mainWindow.webContents.send('changeURL', url);
-      mainWindow.webContents.session.flushStorageData();
+      window.webContents.send('changeURL', url);
+      window.webContents.session.flushStorageData();
     } else {
       shell.openExternal(url);
     }
   });
 
-  mainWindow.once('ready-to-show', () => {
-    mainWindow.show();
+  window.once('ready-to-show', () => {
+    window.show();
   });
 
   ipc.on('unread-count', (evt, unreadCount) => {
@@ -434,8 +411,24 @@ function createWindow() {
 
   });
 
-  focusedWindow = mainWindow;
+  focusedWindow = window;
+  if (isChild) {
+    children.push(window);
+  } else {
+    mainWindow = window;
+  }
 }
+
+function createMailto(url) {
+  replyToWindow = new BrowserWindow({
+    parent: focusedWindow
+  });
+
+  replyToWindow.loadURL(
+    `https://mail.google.com/mail/?extsrc=mailto&url=` + url
+  );
+}
+
 
 function addCustomCSS(windowElement) {
   platform = process.platform == "darwin" ? "macos" : "";
@@ -499,14 +492,19 @@ function init() {
     app.quit();
   });
 
+  app.on('open-url', (event, url) => {
+    event.preventDefault();
+    createMailto(url);
+  });
+
   app.on('ready', function () {
     children_have_parent = store.get("children_have_parent");
-    createWindow();
+    createWindow(false);
     // Dynamically pick a menu-type
     if (process.platform == "darwin") {
-      macOSMenu()
+      macOSMenu();
     } else {
-      otherMenu()
+      otherMenu();
     }
   });
 }
