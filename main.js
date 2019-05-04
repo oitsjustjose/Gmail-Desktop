@@ -8,7 +8,6 @@ const BrowserWindow = electron.BrowserWindow;
 const fs = require('fs');
 const ipc = require('electron').ipcMain;
 const contextMenu = require('electron-context-menu');
-const Debug = require('electron').Debugger
 
 contextMenu({
   shouldShowMenu: true
@@ -386,7 +385,7 @@ function createMailto(url) {
   });
   userID = focusedWindow.webContents.getURL();
   userID = userID.substring(userID.indexOf("/u/") + 3);
-  userID = userID.substring(0,userID.indexOf("/"));
+  userID = userID.substring(0, userID.indexOf("/"));
   replyToWindow.loadURL(
     "https://mail.google.com/mail/u/" + userID + "?extsrc=mailto&url=" + url
   );
@@ -416,6 +415,10 @@ function init() {
   app.on('window-all-closed', function () {
     focusedWindow.webContents.session.flushStorageData();
     app.quit();
+  });
+
+  app.on('browser-window-focus', (event, browserWindow) => {
+    focusedWindow = browserWindow;
   });
 
   app.on('open-url', (event, url) => {
