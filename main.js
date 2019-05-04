@@ -8,10 +8,10 @@ const BrowserWindow = electron.BrowserWindow;
 const fs = require('fs');
 const ipc = require('electron').ipcMain;
 const contextMenu = require('electron-context-menu');
+const Debug = require('electron').Debugger
 
 contextMenu({
-  shouldShowMenu: true,
-  showInspectElement: false
+  shouldShowMenu: true
 });
 
 const store = new Store({
@@ -384,9 +384,11 @@ function createMailto(url) {
   replyToWindow = new BrowserWindow({
     parent: focusedWindow
   });
-
+  userID = focusedWindow.webContents.getURL();
+  userID = userID.substring(userID.indexOf("/u/") + 3);
+  userID = userID.substring(0,userID.indexOf("/"));
   replyToWindow.loadURL(
-    `https://mail.google.com/mail/?extsrc=mailto&url=` + url
+    "https://mail.google.com/mail/u/" + userID + "?extsrc=mailto&url=" + url
   );
 }
 
@@ -418,9 +420,13 @@ function init() {
 
   app.on('open-url', (event, url) => {
     event.preventDefault();
-    app.on('ready', function () {
+    if (app.isReady()) {
       createMailto(url);
-    });
+    } else {
+      app.on('ready', function () {
+        createMailto(url);
+      });
+    }
   });
 
   app.on('ready', function () {
