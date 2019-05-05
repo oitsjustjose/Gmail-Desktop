@@ -8,10 +8,7 @@ const BrowserWindow = electron.BrowserWindow;
 const fs = require('fs');
 const ipc = require('electron').ipcMain;
 const contextMenu = require('electron-context-menu');
-
-contextMenu({
-  shouldShowMenu: true
-});
+const Notification = require('electron').Notification;
 
 const store = new Store({
   configName: "user-preferences",
@@ -25,6 +22,7 @@ let focusedWindow;
 let children = [];
 let children_have_parent;
 let accountNumber = 1;
+let doNotifications;
 
 function otherMenu() {
   var template = [{
@@ -157,6 +155,15 @@ function macOSMenu() {
             } else {
               app.setAsDefaultProtocolClient('mailto');
             }
+          }
+        },
+        {
+          label: "Show Notifications",
+          type: 'checkbox',
+          checked: doNotifications,
+          click: () => {
+            doNotifications = !doNotifications;
+            store.set("notifications", doNotifications);
           }
         },
         {
@@ -309,19 +316,17 @@ function macOSMenu() {
 
   var menu = Menu.buildFromTemplate(template);
 
-  Menu.setApplicationMenu(menu); // Must be called within app.on('ready', function(){ ... });
+  Menu.setApplicationMenu(menu);
 }
 
 function createWindow(isChild) {
-
-  // Create the browser window.
   win = new BrowserWindow({
     title: 'Gmail',
     width: 800,
     height: 600,
     frame: process.platform != "darwin",
     titleBarStyle: process.platform == "darwin" ? 'hidden' : 'default',
-    icon: __dirname + './assets/icons/png/gmail.png',
+    icon: path.join(__dirname, 'assets', 'icons', 'png', 'gmail.png'),
     show: process.platform != "darwin",
     webPreferences: {
       nodeIntegration: false,
@@ -368,6 +373,26 @@ function createWindow(isChild) {
   ipc.on('unread-count', (evt, unreadCount) => {
     if (process.platform == "darwin") {
       app.dock.setBadge(unreadCount ? unreadCount.toString() : '');
+    }
+    if (doNotifications && Notification.isSupported()) {
+      // Move the sound if it doesn't exist -- macOS only
+      if (process.platform == "darwin") {
+        const homedir = require('os').homedir();
+        if (!fs.existsSync(homedir + "/Library/Sounds/gmail.caf")) {
+          fs.copyFileSync(path.join(__dirname, "assets", "sounds", "mail-sent.caf"), homedir + "/Library/Sounds/gmail.caf");
+        }
+      }
+      // Notify the user that there is new mail
+      let notification = new Notification({
+        title: "New Mail",
+        body: "Click to read full message",
+        sound: "gmail",
+        icon: path.join(__dirname, 'assets', 'icons', 'png', 'gmail.png'),
+      });
+      notification.onclick = () => {
+        app.focus();
+      };
+      notification.show();
     }
   });
 
@@ -433,17 +458,20 @@ function init() {
   });
 
   app.on('ready', function () {
-    if (process.platform == "darwin" && !app.isInApplicationsFolder) {
-      didMove = app.moveToApplicationsFolder();
-      if (!didMove) {
-        alert("Couldn't move the app to the Applications folder automatically\nPlease do this yourself!");
-      }
-    }
+
+    contextMenu({
+      shouldShowMenu: true,
+      showInspectElement: !app.isPackaged
+    });
+
     children_have_parent = store.get("children_have_parent");
+    doNotifications = store.get("notifications");
+
     if (process.platform == "darwin") {
       app.dock.bounce("critical");
     }
     createWindow(false);
+
     // Dynamically pick a menu-type
     if (process.platform == "darwin") {
       macOSMenu();
