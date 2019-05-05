@@ -1,3 +1,4 @@
+/* Animations for loading Part I */
 @keyframes fadein {
     from {
         opacity: 0;
@@ -8,10 +9,15 @@
     }
 }
 
+/* The footer information like size used, etc. */
+#\:2 {
+    display: none;
+}
+
+/* Animations for loading Part II */
 body {
     /* Disable text selection, or your app will feel like a web page */
     -webkit-user-select: none;
-    -webkit-app-region: drag;
 
     /* Cover the whole window */
     height: 100%;
@@ -24,106 +30,85 @@ body {
     animation: fadein 2s;
 }
 
-/* Make titlebar draggable */
-#gb,
-/* Message toolbar in new window */
-body.xE .G-atb,
-/* Compose in new window */
-.Io,
-/* PDF viewer */
-.aLF-aPX-aPU-J6 {
+/* Top bar component 1 */
+.aiw {
+    padding: 4px;
+    max-height: 32px;
     -webkit-app-region: drag;
 }
 
-/* Make these elements not draggable */
-/* Hamburger menu */
-.gb_Xb,
-/* Search box */
-.gb_3e,
-/* Account avatar */
-.gb_nc,
-/* Support question mark */
-.gb_ge,
-/* Message toolbar button strip in new window */
-body.xE .G-atb .G-tF,
-/* Minimize compose button in new compose window */
-.Io>.HF,
-/* PDF viewer back button */
-.aLF-aPX-aPU-J6 .aLF-aPX-Jq-I,
-/* PDF viewer right action buttons */
-.aLF-aPX-aPU-J6 .aLF-aPX-aPU-a6I-P6 {
-    -webkit-app-region: no-drag;
+#gb {
+    max-height: 32px;
 }
 
-/* Google apps */
-#gbwa,
-/* Google notifications */
-#gbwa+div {
+/* Disable Gmail Logo */
+.gb_ma {
     display: none;
 }
 
-/* Compact Header */
-#gb .gb_gd {
-    padding: 4px;
+/* Disable Google Apps */
+#gbwa {
+    display: none;
 }
 
-/* Compact header for new windows */
-body.xE .G-atb {
-    padding-bottom: 6px;
-    padding-top: 6px;
+/* Disable Help button */
+#lZwQje {
+    display: none;
 }
 
-/* Remove Gmail logo */
-.gb_ja:not(.gb_ka) .gb_qc .gb_Rb {
-    display: none !important;
+/* Reshape Search Bar */
+.gb_ce .gb_la {
+    min-width: 192px !important;
+    max-height: 32px;
 }
 
-/* Header */
-.gb_lc {
-    height: 32px !important;
+/* Search Icon */
+.gb_Ve.gb_We {
+    margin-top: -6px;
 }
 
-.gb_Xb {
+/* Search Text */
+.gb_3e.gb_We {
+    margin-top: -6px;
+}
+
+/* Search results box */
+.gstl_50.gssb_c {
+    margin-top: -6px;
+}
+
+/* Clear Search Button */
+.gb_Ze.gb_1e {
+    margin-top: -6px;
+}
+
+/* Search dropdown button */
+.gb_2e {
+    margin-top: -6px;
+}
+
+/* Google Notifications */
+#gbwa+div {
+    display: none
+}
+
+/* The entire top area */
+.gb_jd.gb_zd.gb_rd.gb_Zb {
+    padding: 0;
+    -webkit-app-region: drag;
+}
+
+.gb_oc.gb_tc.gb_la.gb_vc {
     padding: 2px !important;
     margin-left: 18px !important;
 }
 
-/* Search box */
-.gb_qc {
-    min-width: 192px !important;
-}
-
-.gb_td.gb_la {
-    margin-top: -3px !important;
-}
-
-.gb_wd.gb_Fd .gb_td .gb_ne {
-    margin-top: 9px !important;
-}
-
-.gb_td,
-.gb_3e,
-.gb_Je {
-    height: 28px !important;
-}
-
-.gb_td button svg,
-.gb_td button img {
-    padding: 2px !important;
-    margin: 0 !important;
-}
-
-.gb_Je {
-    font: normal 14px Roboto, sans-serif !important;
-}
-
-.gssb_e {
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
-    -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
-}
-
 /* Account avatar */
-.gb_fa>.gb_Ea {
+.gb_x.gb_Da.gb_f {
+    margin-top: -12px !important;
+}
+
+gb_fa>.gb_Ea {
     padding: 0 !important;
 }
 
@@ -141,12 +126,12 @@ body.xE .G-atb {
 }
 
 .gb_mc.gb_Ja.gb_lc {
-    height: 28px !important;
+    height: 24px !important;
     margin-top: 1px;
 }
 
 .gb_fa.gb_7f.gb_f {
-    width: 48px !important;
+    width: 24px !important;
 }
 
 .gb_ja:not(.gb_ka) .gb_fa {
@@ -154,7 +139,7 @@ body.xE .G-atb {
     margin-left: 0 !important;
 }
 
-.gb_fa:hover {
+.gb_fa {
     border: 0x none !important;
     background-color: transparent !important;
 }
@@ -172,17 +157,17 @@ body.xE .G-atb {
     background: transparent none !important;
 }
 
-/* Minimal mode */
+/* Hamburger menu */
+.gb_Xb {
+    margin-top: -12px !important;
+}
 
-/* Footer loading text */
-#stb,
-/* Footer text */
-.aeG,
-/* Support question mark */
-.gb_ge,
-/* Side panel */
-.bAw,
-/* Keyboard button */
-.aBS {
-    display: none;
+/* Account Changing Menu */
+.gb_Ta.gb_z.gb_7b {
+    margin-top: -24px;
+}
+
+/* More Tools arrow */
+.brC-dA-I-Jw.brC-aMv-auO {
+    display: None;
 }

@@ -119,13 +119,13 @@ var INTERVAL = 1000;
 var count;
 
 function getUnreadCount() {
-    // Find the number next to the inbox label
     var printButton = document.querySelector('[aria-label="Print all"]');
     if (printButton !== null) {
         printButton.onclick = () => {
             print();
         };
     }
+    // Find the number next to the inbox labelop
     var navigation = document.querySelector('div[role=navigation] [href*="#inbox"]');
     if (navigation) {
         var label = navigation.parentElement.parentElement.querySelector('.bsU');
