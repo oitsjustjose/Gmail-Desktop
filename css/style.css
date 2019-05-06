@@ -171,3 +171,13 @@ gb_fa>.gb_Ea {
 .brC-dA-I-Jw.brC-aMv-auO {
     display: None;
 }
+
+/* Print button (use native print) */
+[data-tooltip="Print all"]{
+    display: None !important; 
+}
+
+/* Hide open-in-new-window button */
+.J-N:last-of-type {
+    display: None !important; 
+}
