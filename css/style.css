@@ -9,31 +9,33 @@
     }
 }
 
-/* The footer information like size used, etc. */
-#\:2 {
-    display: none;
-}
-
 /* Animations for loading Part II */
 body {
     /* Cover the whole window */
     height: 100%;
 
     /* Make sure this matches the native window background color that you pass to
-     * electron.BrowserWindow({...}), otherwise your app startup will look janky. */
+    * electron.BrowserWindow({...}), otherwise your app startup will look janky. */
     background: rgb(40, 40, 40);
 
     /* Smoother startup */
     animation: fadein 2s;
 }
 
-/* Top bar component 1 */
+/* The footer information like size used, etc. */
+#\:2 {
+    display: none;
+}
+
+/* Top bar component I */
 .aiw {
     padding: 4px;
     max-height: 32px;
     -webkit-app-region: drag;
+    box-shadow: none !important;
 }
 
+/* Top bar component II */
 #gb {
     max-height: 32px;
 }
@@ -170,11 +172,11 @@ gb_fa>.gb_Ea {
 }
 
 /* Print button (use native print) */
-[data-tooltip="Print all"]{
-    display: None !important; 
+[data-tooltip="Print all"] {
+    display: None !important;
 }
 
 /* Hide open-in-new-window button */
 .J-N:last-of-type {
-    display: None !important; 
+    display: None !important;
 }
