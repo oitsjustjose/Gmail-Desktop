@@ -310,7 +310,7 @@ function createWindow() {
       nativeWindowOpen: true,
       preload: path.join(__dirname, 'preload')
     },
-    transparent: true
+    transparent: process.platform == "darwin"
   });
 
   mainWindow.loadURL("https://mail.google.com/");
