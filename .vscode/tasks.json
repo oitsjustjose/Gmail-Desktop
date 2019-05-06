@@ -8,6 +8,11 @@
             "script": "start",
             "path": "release-builds/Gmail-darwin-x64/Gmail.app/Contents/Resources/app/",
             "problemMatcher": []
+        },
+        {
+            "type": "npm",
+            "script": "test",
+            "problemMatcher": []
         }
     ]
 }
