@@ -4,7 +4,8 @@
   "description": "A Gmail Electron wrapper",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "test": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=./assets/icons/macOS/gmail.icns --prune=true --out=release-builds; open release-builds/Gmail-darwin-x64/Gmail.app"
   },
   "keywords": [
     "Electron",
