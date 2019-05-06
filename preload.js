@@ -26,7 +26,6 @@ function findUnreads() {
              | This part is for the actual getting of the new message contents to send into a notification |
              |                      We only do this if there's an actual new inbox item                    |
              \*********************************************************************************************/
-            var table = document.querySelector(".F.cf.zt").lastChild;
             var unreads = document.getElementsByClassName("zA zE");
             for (var i in unreads) {
                 if (unreads[i].childNodes !== undefined) {
@@ -43,7 +42,6 @@ function findUnreads() {
                         unreadSenders.push(sender);
                         unreadSubjects.push(subject);
                     }
-                    console.log(unreadSubjects, unreadSenders);
                 }
             }
         }
