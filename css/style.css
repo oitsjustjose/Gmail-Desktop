@@ -16,9 +16,6 @@
 
 /* Animations for loading Part II */
 body {
-    /* Disable text selection, or your app will feel like a web page */
-    -webkit-user-select: none;
-
     /* Cover the whole window */
     height: 100%;
 
