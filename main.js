@@ -13,38 +13,38 @@ const Notification = require('electron').Notification;
 const store = new Store({
   configName: "user-preferences",
   defaults: {
-    "children_have_parent": false
+    "notifications": true
   }
 });
 
 let mainWindow;
-let focusedWindow;
-let children = [];
-let children_have_parent;
-let accountNumber = 1;
 let doNotifications;
 
 function otherMenu() {
   var template = [{
       label: 'File',
       submenu: [{
-          label: 'New Window',
-          accelerator: 'CmdOrCtrl+N',
-          click: () => {
-            createWindow(true);
-          }
-        }, {
-          type: 'separator'
-        },
-        {
           label: 'Print',
           accelerator: 'CmdOrCtrl+P',
           click: () => {
-            window.webContents.print({
+            mainWindow.webContents.print({
               "printBackground": true
             });
           }
-        }, {
+        },
+        {
+          type: "separator"
+        },
+        {
+          label: "Show Notifications",
+          type: 'checkbox',
+          checked: doNotifications,
+          click: () => {
+            doNotifications = !doNotifications;
+            store.set("notifications", doNotifications);
+          }
+        },
+        {
           label: 'Make Default Mail App',
           type: 'checkbox',
           checked: app.isDefaultProtocolClient('mailto'),
@@ -132,7 +132,7 @@ function otherMenu() {
 
   var menu = Menu.buildFromTemplate(template);
 
-  Menu.setApplicationMenu(menu); // Must be called within app.on('ready', function(){ ... });
+  Menu.setApplicationMenu(menu);
 }
 
 function macOSMenu() {
@@ -189,24 +189,14 @@ function macOSMenu() {
     {
       label: 'File',
       submenu: [{
-          label: 'New Window',
-          accelerator: 'CmdOrCtrl+N',
-          click: () => {
-            createWindow(true);
-          }
-        }, {
-          type: 'separator'
-        },
-        {
-          label: 'Print',
-          accelerator: 'CmdOrCtrl+P',
-          click: () => {
-            window.webContents.print({
-              "printBackground": true
-            });
-          }
+        label: 'Print',
+        accelerator: 'CmdOrCtrl+P',
+        click: () => {
+          mainWindow.webContents.print({
+            "printBackground": true
+          });
         }
-      ]
+      }]
     },
     {
       label: 'Edit',
@@ -296,19 +286,6 @@ function macOSMenu() {
         {
           label: 'Bring All to Front',
           selector: 'arrangeInFront:'
-        },
-        {
-          label: 'Group Windows Together',
-          sublabel: 'Selecting this uses the main window as a parent, grouping windows together but may cause some odd (but not broken) behavior',
-          type: 'checkbox',
-          checked: children_have_parent,
-          click: () => {
-            children_have_parent = !children_have_parent;
-            store.set("children_have_parent", children_have_parent);
-            for (var i in children) {
-              children[i].setParentWindow(children_have_parent ? mainWindow : null);
-            }
-          }
         }
       ]
     }
@@ -319,8 +296,8 @@ function macOSMenu() {
   Menu.setApplicationMenu(menu);
 }
 
-function createWindow(isChild) {
-  win = new BrowserWindow({
+function createWindow() {
+  mainWindow = new BrowserWindow({
     title: 'Gmail',
     width: 800,
     height: 600,
@@ -336,79 +313,75 @@ function createWindow(isChild) {
     transparent: true
   });
 
-  if (isChild) {
-    if (children_have_parent) {
-      win.setParentWindow(mainWindow);
-    }
-    win.loadURL("https://mail.google.com/mail/u/" + accountNumber);
-    accountNumber++;
-  } else {
-    win.loadURL("https://mail.google.com/");
-  }
+  mainWindow.loadURL("https://mail.google.com/");
 
-  win.webContents.on('dom-ready', () => {
-    addCustomCSS(win);
+  mainWindow.webContents.on('dom-ready', () => {
+    addCustomCSS(mainWindow);
   });
 
-  win.on('closed', function (event) {
+  mainWindow.on('closed', function (event) {
     event.preventDefault();
   });
 
-  win.webContents.on('new-window', function (e, url) {
+  mainWindow.webContents.on('new-window', function (e, url) {
     e.preventDefault();
     if (url.indexOf("mail.google.com") != -1) {
-      win.loadURL(url);
-      addCustomCSS(win);
-      win.webContents.session.flushStorageData();
+      mainWindow.loadURL(url);
+      addCustomCSS(mainWindow);
+      mainWindow.webContents.session.flushStorageData();
     } else {
       shell.openExternal(url);
     }
   });
 
-  win.once('ready-to-show', () => {
-    win.show();
-    win.focus();
+  mainWindow.once('ready-to-show', () => {
+    mainWindow.show();
+    mainWindow.focus();
   });
 
-  ipc.on('unread-count', (evt, unreadCount) => {
+  ipc.on('unread', (evt, unreadCount) => {
+    // Still update the badge regardless
     if (process.platform == "darwin") {
-      app.dock.setBadge(unreadCount ? unreadCount.toString() : '');
-    }
-    if (doNotifications && Notification.isSupported()) {
-      // Move the sound if it doesn't exist -- macOS only
-      if (process.platform == "darwin") {
-        const homedir = require('os').homedir();
-        if (!fs.existsSync(homedir + "/Library/Sounds/gmail.caf")) {
-          fs.copyFileSync(path.join(__dirname, "assets", "sounds", "mail-sent.caf"), homedir + "/Library/Sounds/gmail.caf");
-        }
-      }
-      // Notify the user that there is new mail
-      let notification = new Notification({
-        title: "New Mail",
-        body: "Click to read full message",
-        sound: "gmail",
-        icon: path.join(__dirname, 'assets', 'icons', 'png', 'gmail.png'),
-      });
-      notification.onclick = () => {
-        app.focus();
-      };
-      notification.show();
+      app.dock.setBadge(unreadCount ? ('' + unreadCount) : '');
     }
   });
 
-  focusedWindow = win;
-  if (isChild) {
-    children.push(win);
-  } else {
-    mainWindow = win;
-  }
+  ipc.on('notification', (evt, sender, subject) => {
+      if (doNotifications && Notification.isSupported()) {
+        // Move the sound if it doesn't exist -- macOS only
+        if (process.platform == "darwin") {
+          const homedir = require('os').homedir();
+          if (!fs.existsSync(homedir + "/Library/Sounds/gmail.caf")) {
+            fs.copyFileSync(path.join(__dirname, "assets", "sounds", "mail-sent.caf"), homedir + "/Library/Sounds/gmail.caf");
+          }
+        }
+        // Notify the user that there is new mail
+        let notification = new Notification({
+          title: "New Mail",
+          subtitle: "From: " + sender,
+          body: subject,
+          sound: "gmail"
+        });
+        notification.onclick = () => {
+          app.focus();
+        };
+        notification.show();
+    }
+  });
+
+  ipc.on('print', () => {
+    alert("IPC Renderer got function `print`");
+    mainWindow.webContents.print({
+      printBackground: true
+    });
+  });
 }
 
 function createMailto(url) {
   replyToWindow = new BrowserWindow({
-    parent: focusedWindow
+    parent: mainWindow
   });
-  userID = focusedWindow.webContents.getURL();
+  userID = mainWindow.webContents.getURL();
   userID = userID.substring(userID.indexOf("/u/") + 3);
   userID = userID.substring(0, userID.indexOf("/"));
   replyToWindow.loadURL(
@@ -438,12 +411,23 @@ function init() {
   app.setName("Gmail");
 
   app.on('window-all-closed', function () {
-    focusedWindow.webContents.session.flushStorageData();
-    app.quit();
+    mainWindow.webContents.session.flushStorageData();
+    mainWindow = null;
+    if (process.platform !== "darwin") {
+      app.quit();
+    }
   });
 
-  app.on('browser-window-focus', (event, browserWindow) => {
-    focusedWindow = browserWindow;
+  app.on('activate', function () {
+    if (mainWindow === null) {
+      createWindow();
+      // Dynamically pick a menu-type
+      if (process.platform == "darwin") {
+        macOSMenu();
+      } else {
+        otherMenu();
+      }
+    }
   });
 
   app.on('open-url', (event, url) => {
@@ -458,19 +442,17 @@ function init() {
   });
 
   app.on('ready', function () {
-
     contextMenu({
       shouldShowMenu: true,
       showInspectElement: !app.isPackaged
     });
 
-    children_have_parent = store.get("children_have_parent");
     doNotifications = store.get("notifications");
 
     if (process.platform == "darwin") {
       app.dock.bounce("critical");
     }
-    createWindow(false);
+    createWindow();
 
     // Dynamically pick a menu-type
     if (process.platform == "darwin") {

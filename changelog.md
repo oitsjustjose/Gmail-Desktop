@@ -7,3 +7,6 @@
 - Added the ability to move itself to the apps folder automatically on macOS
 - Removed navigation options (Home, Back, Forward)
 - Added: Opening a new window will now open the next account available if applicable
+- Fixed: notifications (if enabled); these show the email info and everything!
+- Added: notification sound (if enabled)
+- Removed: Multi-window functionality; this made many things harder
