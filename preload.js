@@ -1,7 +1,9 @@
 exports.__esModule = true;
 var electron = require("electron");
 
-var lastUnread;
+var lastUnread = 0;
+var unreadSubjects = [];
+var unreadSenders = [];
 
 function findUnreads() {
     var unreadElement = document.querySelector(".aio.UKr6le > .bsU");
@@ -24,24 +26,26 @@ function findUnreads() {
              | This part is for the actual getting of the new message contents to send into a notification |
              |                      We only do this if there's an actual new inbox item                    |
              \*********************************************************************************************/
-
-            //  TODO: pick first *unread* not just first el of table
-            var table = document.querySelector(".F.cf.zt");
-            var row = table.lastChild;
-
-            var sender = row.firstChild.childNodes[4];
-            sender = sender.childNodes[1];
-            sender = sender.childNodes[0];
-            sender = sender.childNodes[0].innerHTML;
-
-            var subject = row.firstChild.childNodes[5];
-            subject = subject.childNodes[0];
-            subject = subject.childNodes[0];
-            subject = subject.childNodes[0];
-            subject = subject.childNodes[0];
-            subject = subject.childNodes[0].innerHTML;
-
-            electron.ipcRenderer.send('notification', sender, subject);
+            var table = document.querySelector(".F.cf.zt").lastChild;
+            var unreads = document.getElementsByClassName("zA zE");
+            for (var i in unreads) {
+                if (unreads[i].childNodes !== undefined) {
+                    var sender = unreads[i].childNodes[4].childNodes[1].childNodes[0].childNodes[0].innerHTML;
+                    // Sometimes there's an extra child node..
+                    var subject = unreads[i].childNodes[5].childNodes[0].childNodes[0].childNodes[0].childNodes[0].childNodes[0].childNodes[0].innerHTML;
+                    if (subject === undefined) {
+                        subject = unreads[i].childNodes[5].childNodes[0].childNodes[0].childNodes[0].childNodes[0].childNodes[0].innerHTML;
+                    }
+                    if (unreadSubjects.includes(subject) && unreadSenders.includes(sender)) {
+                        continue;
+                    } else {
+                        electron.ipcRenderer.send('notification', sender, subject);
+                        unreadSenders.push(sender);
+                        unreadSubjects.push(subject);
+                    }
+                    console.log(unreadSubjects, unreadSenders);
+                }
+            }
         }
         // Be sure to update this *after* we've sent the notification, not before
         lastUnread = unreadCount;
