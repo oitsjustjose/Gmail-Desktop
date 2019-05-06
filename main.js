@@ -347,25 +347,25 @@ function createWindow() {
   });
 
   ipc.on('notification', (evt, sender, subject) => {
-      if (doNotifications && Notification.isSupported()) {
-        // Move the sound if it doesn't exist -- macOS only
-        if (process.platform == "darwin") {
-          const homedir = require('os').homedir();
-          if (!fs.existsSync(homedir + "/Library/Sounds/gmail.caf")) {
-            fs.copyFileSync(path.join(__dirname, "assets", "sounds", "mail-sent.caf"), homedir + "/Library/Sounds/gmail.caf");
-          }
+    if (doNotifications && Notification.isSupported()) {
+      // Move the sound if it doesn't exist -- macOS only
+      if (process.platform == "darwin") {
+        const homedir = require('os').homedir();
+        if (!fs.existsSync(homedir + "/Library/Sounds/gmail.caf")) {
+          fs.copyFileSync(path.join(__dirname, "assets", "sounds", "mail-sent.caf"), homedir + "/Library/Sounds/gmail.caf");
         }
-        // Notify the user that there is new mail
-        let notification = new Notification({
-          title: "New Mail",
-          subtitle: "From: " + sender,
-          body: subject,
-          sound: "gmail"
-        });
-        notification.onclick = () => {
-          app.focus();
-        };
-        notification.show();
+      }
+      // Notify the user that there is new mail
+      let notification = new Notification({
+        title: "New Mail",
+        subtitle: "From: " + sender,
+        body: subject,
+        sound: "gmail"
+      });
+      notification.onclick = () => {
+        app.focus();
+      };
+      notification.show();
     }
   });
 
@@ -442,10 +442,16 @@ function init() {
   });
 
   app.on('ready', function () {
-    contextMenu({
-      shouldShowMenu: true,
-      showInspectElement: !app.isPackaged
-    });
+    if (app.isPackaged) {
+      contextMenu({
+        shouldShowMenu: true
+      });
+    } else {
+      contextMenu({
+        shouldShowMenu: true,
+        showInspectElement: true
+      });
+    }
 
     doNotifications = store.get("notifications");
 
