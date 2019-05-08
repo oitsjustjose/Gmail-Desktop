@@ -1,11 +1,23 @@
-echo "Buildling Gmail for Windows"
+echo "Cleaning"
 
-electron-packager . "Gmail" --overwrite --asar=true --platform=win32 --arch=ia32 --icon=assets/icons/win/gmail.ico --prune=true --out=release-builds --version-string.CompanyName=oitsjustjose --version-string.FileDescription="A simple Gmail electron wrapper" --version-string.ProductName="Gmail"
+rm -rf ./dist
 
-echo "Building Gmail for macOS"
+echo "Building for Windows"
 
-electron-packager . --overwrite --platform=darwin --arch=x64 --icon=./assets/icons/macOS/gmail.icns --prune=true --out=release-builds
+electron-builder . --win
 
-echo "Building Gmail for Linux"
+echo "Building for macOS"
 
-electron-packager . "Gmail" --overwrite --asar=true --platform=linux --arch=x64 --icon=assets/icons/png/gmail.png --prune=true --out=release-builds
+electron-builder .
+
+echo "Building for Linux"
+
+electron-builder . --linux
+
+electron-builder . --linux snap
+
+snapcraft push --release=stable dist/Gmail_*.snap
+
+echo "Done!"
+
+open ./dist

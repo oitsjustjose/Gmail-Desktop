@@ -1,11 +1,11 @@
 {
-  "name": "Gmail-Desktop",
+  "name": "Gmail",
   "version": "1.3.0",
-  "description": "A Gmail Electron wrapper",
+  "description": "A cross-platform dedicated Gmail application, fully fledged with notifications, multi-account support and more. Streamlined for most platforms",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "test": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=./assets/icons/macOS/gmail.icns --prune=true --out=release-builds; open release-builds/Gmail-darwin-x64/Gmail.app"
+    "build": "sh build.sh"
   },
   "keywords": [
     "Electron",
@@ -26,6 +26,9 @@
   },
   "build": {
     "appId": "com.oitsjustjose.gmaildesktop",
+    "appImage": {
+      "category": "public.app-category.productivity"
+    },
     "mac": {
       "category": "public.app-category.productivity",
       "icon": "assets/icons/macOS/gmail.icns"
@@ -33,8 +36,27 @@
     "win": {
       "icon": "assets/icons/win/gmail.ico"
     },
-    "snap": {
-      "confinement": "strict"
+    "linux": {
+      "icon": "assets/icons/png/gmail.png"
+    },
+    "deb": {
+      "icon": "assets/icons/png/gmail.png"
+    },
+    "snap": {},
+    "pacman": {
+      "icon": "assets/icons/png/gmail.png"
+    },
+    "rpm": {
+      "icon": "assets/icons/png/gmail.png"
+    },
+    "freebsd": {
+      "icon": "assets/icons/png/gmail.png"
+    },
+    "p5p": {
+      "icon": "assets/icons/png/gmail.png"
+    },
+    "apk": {
+      "icon": "assets/icons/png/gmail.png"
     }
   }
 }
