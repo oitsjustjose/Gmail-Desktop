@@ -3,6 +3,7 @@
     from {
         opacity: 0;
     }
+
     to {
         opacity: 1;
     }
@@ -17,6 +18,8 @@ body {
 
 /* gb_jd gb_zd gb_rd gb_Zb <-- this is DARK THEME */
 /* gb_jd gb_zd gb_rd <-- this is LIGHT THEME */
+
+
 
 /* The footer information like size used, etc. */
 #\:2 {
@@ -52,18 +55,18 @@ body {
 }
 
 /* Reshape Search Bar */
-.gb_ce .gb_la {
+.gb_Xe.gb_Re {
     min-width: 192px !important;
     max-height: 32px;
 }
 
 /* Search Icon */
-.gb_Ve.gb_We {
+.gb_Qe.gb_Re {
     margin-top: -6px;
 }
 
 /* Search Text */
-.gb_3e.gb_We {
+.gb_He {
     margin-top: -6px;
 }
 
@@ -78,7 +81,7 @@ body {
 }
 
 /* Search dropdown button */
-.gb_2e {
+.gb_We {
     margin-top: -6px;
 }
 
