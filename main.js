@@ -137,9 +137,9 @@ function otherMenu() {
 
 function macOSMenu() {
   var template = [{
-      label: 'Gmail',
+      label: 'Gmail Desktop',
       submenu: [{
-          label: 'About Gmail',
+          label: 'About Gmail Desktop',
           role: 'about'
         },
         {
@@ -298,7 +298,7 @@ function macOSMenu() {
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    title: 'Gmail',
+    title: 'Gmail Desktop',
     width: 800,
     height: 600,
     frame: process.platform != "darwin",
@@ -408,7 +408,7 @@ function addCustomCSS(windowElement) {
 }
 
 function init() {
-  app.setName("Gmail");
+  app.setName("Gmail Desktop");
 
   app.on('window-all-closed', function () {
     mainWindow.webContents.session.flushStorageData();
