@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.4.5:
+
+- Fixed Gmail CSS again -- using attribute selectors where possible now, so hopefully it'll stop breaking >_>
+- Renamed to Gmail-Electron to prevent any confusion that this is an actual Google product.
+  - Unfortunately this means you'll have to log back into the app again
+
+## 1.4.0:
+
 - Added right-click menu
 - Added mailto protocol; opening an email will open it with the app (the 'from' address will be from the last-focused window)
 - Changed aesthetic to be more pleasing (hid elements, made top-bar smaller)
