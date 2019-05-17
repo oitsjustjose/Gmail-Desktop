@@ -16,7 +16,7 @@ electron-builder . --linux
 
 electron-builder . --linux snap
 
-snapcraft push --release=stable dist/Gmail_*.snap
+snapcraft push --release=stable dist/Gmail-Desktop_*.snap
 
 echo "Done!"
 

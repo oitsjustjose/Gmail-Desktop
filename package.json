@@ -1,11 +1,15 @@
 {
-  "name": "Gmail",
-  "version": "1.4.0",
+  "name": "Gmail-Desktop",
+  "version": "1.4.5",
   "description": "A cross-platform dedicated Gmail application, fully fledged with notifications, multi-account support and more. Streamlined for most platforms",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
     "build": "sh build.sh"
+  },
+  "repository": {
+    "type": "GitHub",
+    "url": "https://github.com/oitsjustjose/gmail-desktop"
   },
   "keywords": [
     "Electron",
@@ -16,8 +20,8 @@
   "author": "oitsjustjose",
   "license": "CC0-1.0",
   "devDependencies": {
-    "electron": "^4.1.3",
-    "electron-builder": "^20.39.0"
+    "electron": "^4.2.1",
+    "electron-builder": "^20.40.2"
   },
   "dependencies": {
     "electron-context-menu": "^0.12.1",
