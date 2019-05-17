@@ -31,17 +31,18 @@ body {
     padding: 4px;
     max-height: 32px;
     -webkit-app-region: drag;
-    /* box-shadow: none !important; */
 }
 
 /* Top bar component II */
-#gb {
-    max-height: 32px;
+[role$="banner"] {
+    max-height: 64px !important;
+    -webkit-app-region: drag;
 }
 
+
 /* Disable Gmail Logo */
-.gb_ma {
-    display: none;
+.gb_Qb {
+    display: none !important;
 }
 
 /* Disable Google Apps */
@@ -55,18 +56,19 @@ body {
 }
 
 /* Reshape Search Bar */
-.gb_Xe.gb_Re {
+[gh$="sb"] {
+    /* padding-top: 16px !important; */
     min-width: 192px !important;
-    max-height: 32px;
+    max-height: 32px !important;
 }
 
 /* Search Icon */
-.gb_Qe.gb_Re {
+[aria-label$="Search Mail"] {
     margin-top: -6px;
 }
 
 /* Search Text */
-.gb_He {
+[aria-label$="Search mail"] {
     margin-top: -6px;
 }
 
@@ -81,7 +83,7 @@ body {
 }
 
 /* Search dropdown button */
-.gb_We {
+[aria-label$="Advanced search options"] {
     margin-top: -6px;
 }
 
@@ -109,10 +111,6 @@ body {
     margin-left: 18px !important;
 }
 
-/* Account avatar */
-.gb_x.gb_Da.gb_f {
-    margin-top: -12px !important;
-}
 
 gb_fa>.gb_Ea {
     padding: 0 !important;
@@ -164,8 +162,19 @@ gb_fa>.gb_Ea {
 }
 
 /* Hamburger menu */
-.gb_Xb {
-    margin-top: -12px !important;
+[aria-label$="Main menu"] {
+    margin-top: -6px !important;
+}
+
+/* Account icon */
+[data-ogsr-up] {
+    margin-top: -6px !important;
+}
+
+/* This controls that wierd line that often cuts things off */
+.gb_id.gb_yd.gb_qd.gb_Xb {
+    height: 72px !important;
+    margin-top: -6px !important;
 }
 
 /* Account Changing Menu */
