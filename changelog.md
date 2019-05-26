@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.4.6: 
+- Fixed Gmail CSS again -- using more attribute selectors now, hopefully fixing the top bar, gmail logo and apps popout on the right.
+
 ## 1.4.5:
 
 - Fixed Gmail CSS again -- using attribute selectors where possible now, so hopefully it'll stop breaking >_>
