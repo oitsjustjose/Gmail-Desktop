@@ -10,15 +10,26 @@ const ipc = require('electron').ipcMain;
 const contextMenu = require('electron-context-menu');
 const Notification = require('electron').Notification;
 
-const store = new Store({
-  configName: "user-preferences",
-  defaults: {
-    "notifications": true
-  }
-});
+if (process.platform != "darwin") {
+  const store = new Store({
+    configName: "user-preferences",
+    defaults: {
+      "notifications": true,
+      "autoHideMenuBar": true
+    }
+  });
+} else {
+  const store = new Store({
+    configName: "user-preferences",
+    defaults: {
+      "notifications": true
+    }
+  });
+}
 
 let mainWindow;
 let doNotifications;
+let autoHideMenuBar;
 
 function otherMenu() {
   var template = [{
@@ -43,7 +54,7 @@ function otherMenu() {
             doNotifications = !doNotifications;
             store.set("notifications", doNotifications);
           }
-        },
+        },  
         {
           label: 'Make Default Mail App',
           type: 'checkbox',
@@ -56,6 +67,18 @@ function otherMenu() {
             }
           }
         },
+        {
+          label: "Autohide Menu Bar",
+          type: "checkbox",
+          checked: autoHideMenuBar,
+          click: () => {
+            autoHideMenuBar = !autoHideMenuBar;
+            store.set("autoHideMenuBar", autoHideMenuBar);
+            if(mainWindow !== null){
+              mainWindow.setAutoHideMenuBar(autoHideMenuBar);
+            }
+          }
+        }
       ]
     },
     {
@@ -310,9 +333,10 @@ function createWindow() {
       nativeWindowOpen: true,
       preload: path.join(__dirname, 'preload')
     },
-    transparent: process.platform == "darwin"
+    transparent: process.platform == "darwin",
+    autoHideMenuBar: (process.platform != "darwin" && autoHideMenuBar)
   });
-
+  
   mainWindow.loadURL("https://mail.google.com/");
 
   mainWindow.webContents.on('dom-ready', () => {
@@ -455,18 +479,19 @@ function init() {
     }
 
     doNotifications = store.get("notifications");
+    autoHideMenuBar = store.get("autoHideMenuBar");
+
 
     if (process.platform == "darwin") {
       app.dock.bounce("critical");
     }
-    createWindow();
-
-    // Dynamically pick a menu-type
+    // Dynamically pick a   u-type
     if (process.platform == "darwin") {
       macOSMenu();
     } else {
       otherMenu();
     }
+    createWindow();
   });
 }
 
