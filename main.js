@@ -10,22 +10,13 @@ const ipc = require('electron').ipcMain;
 const contextMenu = require('electron-context-menu');
 const Notification = require('electron').Notification;
 
-if (process.platform != "darwin") {
-  const store = new Store({
-    configName: "user-preferences",
-    defaults: {
-      "notifications": true,
-      "autoHideMenuBar": true
-    }
-  });
-} else {
-  const store = new Store({
-    configName: "user-preferences",
-    defaults: {
-      "notifications": true
-    }
-  });
-}
+const store = new Store({
+  configName: "user-preferences",
+  defaults: {
+    "notifications": true,
+    "autoHideMenuBar": true
+  }
+});
 
 let mainWindow;
 let doNotifications;
@@ -54,7 +45,7 @@ function otherMenu() {
             doNotifications = !doNotifications;
             store.set("notifications", doNotifications);
           }
-        },  
+        },
         {
           label: 'Make Default Mail App',
           type: 'checkbox',
@@ -74,7 +65,7 @@ function otherMenu() {
           click: () => {
             autoHideMenuBar = !autoHideMenuBar;
             store.set("autoHideMenuBar", autoHideMenuBar);
-            if(mainWindow !== null){
+            if (mainWindow !== null) {
               mainWindow.setAutoHideMenuBar(autoHideMenuBar);
             }
           }
@@ -336,7 +327,7 @@ function createWindow() {
     transparent: process.platform == "darwin",
     autoHideMenuBar: (process.platform != "darwin" && autoHideMenuBar)
   });
-  
+
   mainWindow.loadURL("https://mail.google.com/");
 
   mainWindow.webContents.on('dom-ready', () => {
