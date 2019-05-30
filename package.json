@@ -1,6 +1,6 @@
 {
   "name": "Gmail-Desktop",
-  "version": "1.4.6",
+  "version": "1.4.7",
   "description": "A cross-platform dedicated Gmail application, fully fledged with notifications, multi-account support and more. Streamlined for most platforms",
   "main": "main.js",
   "scripts": {

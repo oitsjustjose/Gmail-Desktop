@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.4.7:
+- Allow the menubar to autohide (and make that a setting)
+
 ## 1.4.6: 
 - Fixed Gmail CSS again -- using more attribute selectors now, hopefully fixing the top bar, gmail logo and apps popout on the right.
 
