@@ -9,18 +9,18 @@ const fs = require('fs');
 const ipc = require('electron').ipcMain;
 const contextMenu = require('electron-context-menu');
 const Notification = require('electron').Notification;
+const WinBadge = require('electron-windows-badge');
 
 const store = new Store({
   configName: "user-preferences",
   defaults: {
     "notifications": true,
-    "autoHideMenuBar": true
   }
 });
 
 let mainWindow;
 let doNotifications;
-let autoHideMenuBar;
+let winBadge
 
 function otherMenu() {
   var template = [{
@@ -58,18 +58,6 @@ function otherMenu() {
             }
           }
         },
-        {
-          label: "Autohide Menu Bar",
-          type: "checkbox",
-          checked: autoHideMenuBar,
-          click: () => {
-            autoHideMenuBar = !autoHideMenuBar;
-            store.set("autoHideMenuBar", autoHideMenuBar);
-            if (mainWindow !== null) {
-              mainWindow.setAutoHideMenuBar(autoHideMenuBar);
-            }
-          }
-        }
       ]
     },
     {
@@ -315,8 +303,8 @@ function createWindow() {
     title: 'Gmail Desktop',
     width: 800,
     height: 600,
-    frame: process.platform != "darwin",
-    titleBarStyle: process.platform == "darwin" ? 'hidden' : 'default',
+    frame: process.platform != "darwin" && process.platform != "win32",
+    titleBarStyle: 'hidden',
     icon: path.join(__dirname, 'assets', 'icons', 'png', 'gmail.png'),
     show: process.platform != "darwin",
     webPreferences: {
@@ -325,7 +313,6 @@ function createWindow() {
       preload: path.join(__dirname, 'preload')
     },
     transparent: process.platform == "darwin",
-    autoHideMenuBar: (process.platform != "darwin" && autoHideMenuBar)
   });
 
   mainWindow.loadURL("https://mail.google.com/");
@@ -349,15 +336,63 @@ function createWindow() {
     }
   });
 
+  mainWindow.on('page-title-updated', (evt) => {
+    evt.preventDefault();
+
+  });
+
+  ipc.on('menu', function (evt, x, y) {
+    Menu.getApplicationMenu().popup({
+      x: Math.ceil(x),
+      y: Math.ceil(y)
+    });
+  });
+
+  ipc.on('exit', () => {
+    mainWindow.close();
+  });
+
+  ipc.on('unmaximize', () => {
+    mainWindow.unmaximize();
+  });
+
+  ipc.on('maximize', () => {
+    mainWindow.maximize();
+  });
+
+  ipc.on('minimize', () => {
+    mainWindow.minimize();
+  });
+
+  mainWindow.on('maximize', () => {
+    mainWindow.webContents.executeJavaScript(
+      `document.getElementById('gmailDesktopMaximize').setAttribute("ismax", 0);
+      document.getElementById('gmailDesktopMaximize').setAttribute("src", "https://raw.githubusercontent.com/oitsjustjose/Gmail-Desktop/master/assets/restore.png");`
+    );
+  });
+
+  mainWindow.on("unmaximize", () => {
+    mainWindow.webContents.executeJavaScript(
+      `document.getElementById('gmailDesktopMaximize').setAttribute("ismax",1);
+      document.getElementById('gmailDesktopMaximize').setAttribute("src", "https://raw.githubusercontent.com/oitsjustjose/Gmail-Desktop/master/assets/maximize.png");`
+    );
+  })
+
   mainWindow.once('ready-to-show', () => {
     mainWindow.show();
     mainWindow.focus();
   });
 
+  if (process.platform == "win32") {
+    winBadge = new WinBadge(mainWindow, {});
+  }
+
   ipc.on('unread', (evt, unreadCount) => {
     // Still update the badge regardless
     if (process.platform == "darwin") {
       app.dock.setBadge(unreadCount ? ('' + unreadCount) : '');
+    } else if (process.platform == "win32") {
+      winBadge.update(unreadCount);
     }
   });
 
@@ -372,13 +407,14 @@ function createWindow() {
       }
       // Notify the user that there is new mail
       let notification = new Notification({
-        title: "New Mail",
-        subtitle: "From: " + sender,
+        title: process.platform == "win32" ? ("From: " + sender) : "New Mail",
+        subtitle: process.platform == "win32" ? subject : "From: " + sender,
         body: subject,
         sound: "gmail"
       });
       notification.onclick = () => {
         app.focus();
+        mainWindow.focus();
       };
       notification.show();
     }
@@ -446,6 +482,8 @@ function init() {
     }
   });
 
+
+
   app.on('open-url', (event, url) => {
     event.preventDefault();
     if (app.isReady()) {
@@ -470,7 +508,6 @@ function init() {
     }
 
     doNotifications = store.get("notifications");
-    autoHideMenuBar = store.get("autoHideMenuBar");
 
 
     if (process.platform == "darwin") {

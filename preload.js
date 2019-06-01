@@ -4,6 +4,14 @@ var electron = require("electron");
 var lastUnread = 0;
 var unreadSubjects = [];
 var unreadSenders = [];
+const icons = {
+    "menu": "https://raw.githubusercontent.com/oitsjustjose/Gmail-Desktop/ba4108612c67246507964827ee3462a6d5529835/assets/more-options.png",
+    "close": "https://raw.githubusercontent.com/oitsjustjose/Gmail-Desktop/82880b645524c08e3c2fefadcad2d8e44fa67a28/assets/close.png",
+    "maximize": "https://raw.githubusercontent.com/oitsjustjose/Gmail-Desktop/82880b645524c08e3c2fefadcad2d8e44fa67a28/assets/maximize.png",
+    "restore": "https://raw.githubusercontent.com/oitsjustjose/Gmail-Desktop/82880b645524c08e3c2fefadcad2d8e44fa67a28/assets/restore.png",
+    "minimize": "https://raw.githubusercontent.com/oitsjustjose/Gmail-Desktop/82880b645524c08e3c2fefadcad2d8e44fa67a28/assets/minimize.png",
+    "app": "https://raw.githubusercontent.com/oitsjustjose/Gmail-Desktop/82880b645524c08e3c2fefadcad2d8e44fa67a28/assets/icons/png/gmail.png"
+};
 
 function findUnreads() {
     var unreadElement = document.querySelector(".aio.UKr6le > .bsU");
@@ -51,5 +59,41 @@ function findUnreads() {
 }
 
 window.addEventListener('load', () => {
+    var header = document.createElement("div");
+    header.id = "GmailDesktopTitlebar";
+    header.innerHTML = "<img src='" + icons.menu + "' id='gmailDesktopOptions'>";
+    header.innerHTML += "<b><p id='GoogleDesktopTitlebarText'><img src='" + icons.app + "'  id='GoogleDesktopTitlebarLogo'>Gmail Desktop</p></b>";
+
+    var windowControls = document.createElement("div");
+    windowControls.id = "GmailDesktopWindowControls";
+    windowControls.innerHTML += "<img src='" + icons.minimize + "' id='gmailDesktopMinimize'>";
+    windowControls.innerHTML += "<img src='" + icons.maximize + "' id='gmailDesktopMaximize' ismax=1>";
+    windowControls.innerHTML += "<img src='" + icons.close + "' id='gmailDesktopClose'>";
+
+    header.appendChild(windowControls);
+
+    document.getElementsByTagName("body")[0].insertBefore(header, document.getElementsByTagName("body")[0].childNodes[0]);
+
+    document.getElementById('gmailDesktopOptions').addEventListener('click', (event) => {
+        electron.ipcRenderer.send("menu", event.clientX, event.clientY);
+    });
+
+    document.getElementById('gmailDesktopClose').addEventListener('click', () => {
+        electron.ipcRenderer.send("exit");
+    });
+
+    document.getElementById('gmailDesktopMaximize').addEventListener('click', () => {
+        if (document.getElementById('gmailDesktopMaximize').getAttribute("ismax") == 1) {
+            electron.ipcRenderer.send("maximize");
+        } else {
+            electron.ipcRenderer.send("unmaximize");
+        }
+    });
+
+    document.getElementById('gmailDesktopMinimize').addEventListener('click', () => {
+        electron.ipcRenderer.send("minimize");
+    });
+
     intvl = setInterval(findUnreads, 1000);
+
 });

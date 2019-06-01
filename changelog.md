@@ -1,6 +1,11 @@
 # Changelog
 
 ## 1.4.7:
+- Windows will now proper notifications and notification bubbles in the taskbar
+- Prevent window title from changing (fixes bug with double-pinning in Windows)
+- Revamped non-macOS titlebar by doing everything myself from scratch. Please leave feedback on the titlebar color, I'm not sure about it yet either
+
+## 1.4.7:
 - Allow the menubar to autohide (and make that a setting)
 
 ## 1.4.6: 

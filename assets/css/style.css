@@ -38,13 +38,11 @@ body {
 .aiw {
     /* padding: 4px; */
     max-height: 32px;
-    -webkit-app-region: drag;
 }
 
 /* Top bar component II */
 [role$="banner"] {
     max-height: 48px !important;
-    -webkit-app-region: drag;
     box-shadow: 0px 1px #777777 !important;
 }
 
@@ -104,14 +102,12 @@ body {
 .gb_jd.gb_zd.gb_rd.gb_Zb {
     margin-top: -10px;
     margin-bottom: 25px;
-    -webkit-app-region: drag;
 }
 
 /* The entire top area (light theme) */
 .gb_jd.gb_zd.gb_rd:not(.gb_Zb) {
     margin-top: -10px;
     margin-bottom: 25px;
-    -webkit-app-region: drag;
 }
 
 .gb_oc.gb_tc.gb_la.gb_vc {
@@ -203,4 +199,91 @@ gb_fa>.gb_Ea {
 /* Hide open-in-new-window button */
 .J-N:last-of-type {
     display: None !important;
+}
+
+
+/* Custom titlebar for Windows & Linux */
+#GmailDesktopTitlebar {
+    display: flex;
+    justify-content: space-between;
+    padding-left: 8px;
+    padding-right: 8px;
+    height: 32px;
+    width: 100%;
+    -webkit-app-region: drag;
+    background-color: rgb(134, 41, 41);
+}
+
+#GoogleDesktopTitlebarText {
+    max-height: 24px;
+    display: flex;
+    justify-content: center;
+    margin-top: 8px !important;
+}
+
+#GoogleDesktopTitlebarLogo {
+    max-height: 24px;
+    max-width: 24px;
+    padding-right: 8px;
+    margin-top: -4px !important;
+}
+
+#GmailDesktopWindowControls {
+    display: flex;
+    justify-content: right;
+    padding-top: 4px;
+    padding-right: 4px;
+}
+
+#gmailDesktopOptions {
+    display: flex;
+    -webkit-app-region: no-drag;
+    max-width: 24px;
+    max-height: 24px;
+    padding-top: 4px;
+}
+
+#gmailDesktopOptions:hover {
+    filter: invert(100%);
+    -webkit-filter: invert(100%) !important;
+    margin-top: -1px;
+}
+
+#gmailDesktopMinimize {
+    -webkit-app-region: no-drag;
+    max-width: 24px;
+    max-height: 24px;
+    padding-right: 8px;
+}
+
+#gmailDesktopMinimize:hover {
+    filter: invert(100%);
+    -webkit-filter: invert(100%) !important;
+    margin-top: -1px;
+}
+
+#gmailDesktopMaximize {
+    -webkit-app-region: no-drag;
+    max-width: 24px;
+    max-height: 24px;
+    padding-right: 8px;
+}
+
+#gmailDesktopMaximize:hover {
+    filter: invert(100%);
+    -webkit-filter: invert(100%) !important;
+    margin-top: -1px;
+}
+
+#gmailDesktopClose {
+    -webkit-app-region: no-drag;
+    max-width: 24px;
+    max-height: 24px;
+    padding-right: 8px;
+}
+
+#gmailDesktopClose:hover {
+    filter: invert(100%);
+    -webkit-filter: invert(100%) !important;
+    margin-top: -1px;
 }
