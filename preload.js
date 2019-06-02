@@ -4,14 +4,6 @@ var electron = require("electron");
 var lastUnread = 0;
 var unreadSubjects = [];
 var unreadSenders = [];
-const icons = {
-    "menu": "https://raw.githubusercontent.com/oitsjustjose/Gmail-Desktop/ba4108612c67246507964827ee3462a6d5529835/assets/more-options.png",
-    "close": "https://raw.githubusercontent.com/oitsjustjose/Gmail-Desktop/82880b645524c08e3c2fefadcad2d8e44fa67a28/assets/close.png",
-    "maximize": "https://raw.githubusercontent.com/oitsjustjose/Gmail-Desktop/82880b645524c08e3c2fefadcad2d8e44fa67a28/assets/maximize.png",
-    "restore": "https://raw.githubusercontent.com/oitsjustjose/Gmail-Desktop/82880b645524c08e3c2fefadcad2d8e44fa67a28/assets/restore.png",
-    "minimize": "https://raw.githubusercontent.com/oitsjustjose/Gmail-Desktop/82880b645524c08e3c2fefadcad2d8e44fa67a28/assets/minimize.png",
-    "app": "https://raw.githubusercontent.com/oitsjustjose/Gmail-Desktop/82880b645524c08e3c2fefadcad2d8e44fa67a28/assets/icons/png/gmail.png"
-};
 
 function findUnreads() {
     var unreadElement = document.querySelector(".aio.UKr6le > .bsU");
@@ -58,7 +50,16 @@ function findUnreads() {
     }
 }
 
-window.addEventListener('load', () => {
+function bootstrapHeader() {
+    const icons = {
+        "menu": "https://raw.githubusercontent.com/oitsjustjose/Gmail-Desktop/ba4108612c67246507964827ee3462a6d5529835/assets/more-options.png",
+        "close": "https://raw.githubusercontent.com/oitsjustjose/Gmail-Desktop/82880b645524c08e3c2fefadcad2d8e44fa67a28/assets/close.png",
+        "maximize": "https://raw.githubusercontent.com/oitsjustjose/Gmail-Desktop/82880b645524c08e3c2fefadcad2d8e44fa67a28/assets/maximize.png",
+        "restore": "https://raw.githubusercontent.com/oitsjustjose/Gmail-Desktop/82880b645524c08e3c2fefadcad2d8e44fa67a28/assets/restore.png",
+        "minimize": "https://raw.githubusercontent.com/oitsjustjose/Gmail-Desktop/82880b645524c08e3c2fefadcad2d8e44fa67a28/assets/minimize.png",
+        "app": "https://raw.githubusercontent.com/oitsjustjose/Gmail-Desktop/82880b645524c08e3c2fefadcad2d8e44fa67a28/assets/icons/png/gmail.png"
+    };
+
     var header = document.createElement("div");
     header.id = "GmailDesktopTitlebar";
     header.innerHTML = "<img src='" + icons.menu + "' id='gmailDesktopOptions'>";
@@ -94,6 +95,14 @@ window.addEventListener('load', () => {
         electron.ipcRenderer.send("minimize");
     });
 
+    electron.ipcRenderer.send("made_toolbar");
+}
+
+window.addEventListener('load', () => {
+    // If *not* mac:
+    if (navigator.platform.toLowerCase().indexOf("mac") === -1) {
+        bootstrapHeader();
+    }
     intvl = setInterval(findUnreads, 1000);
 
 });

@@ -211,7 +211,7 @@ gb_fa>.gb_Ea {
     height: 32px;
     width: 100%;
     -webkit-app-region: drag;
-    background-color: rgb(134, 41, 41);
+    background-color: #7F7F7F;
 }
 
 #GoogleDesktopTitlebarText {

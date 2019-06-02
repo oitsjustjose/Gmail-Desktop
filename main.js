@@ -1,302 +1,22 @@
 const electron = require('electron');
 const path = require('path');
 const shell = require('electron').shell;
-const Store = require('./store.js');
 const app = electron.app;
-const Menu = electron.Menu;
 const BrowserWindow = electron.BrowserWindow;
 const fs = require('fs');
 const ipc = require('electron').ipcMain;
 const contextMenu = require('electron-context-menu');
 const Notification = require('electron').Notification;
 const WinBadge = require('electron-windows-badge');
+const Menu = electron.Menu;
 
-const store = new Store({
-  configName: "user-preferences",
-  defaults: {
-    "notifications": true,
-  }
-});
+const getMenuForOS = require("./menus.js").getMenu;
+const shouldNotify = require("./menus.js").shouldNotify;
+const updateColor = require('./colors.js').updateColor;
 
 let mainWindow;
-let doNotifications;
-let winBadge
+let winBadge;
 
-function otherMenu() {
-  var template = [{
-      label: 'File',
-      submenu: [{
-          label: 'Print',
-          accelerator: 'CmdOrCtrl+P',
-          click: () => {
-            mainWindow.webContents.print({
-              "printBackground": true
-            });
-          }
-        },
-        {
-          type: "separator"
-        },
-        {
-          label: "Show Notifications",
-          type: 'checkbox',
-          checked: doNotifications,
-          click: () => {
-            doNotifications = !doNotifications;
-            store.set("notifications", doNotifications);
-          }
-        },
-        {
-          label: 'Make Default Mail App',
-          type: 'checkbox',
-          checked: app.isDefaultProtocolClient('mailto'),
-          click() {
-            if (app.isDefaultProtocolClient('mailto')) {
-              app.removeAsDefaultProtocolClient('mailto');
-            } else {
-              app.setAsDefaultProtocolClient('mailto');
-            }
-          }
-        },
-      ]
-    },
-    {
-      label: 'Edit',
-      submenu: [{
-          label: 'Undo',
-          accelerator: 'CmdOrCtrl+Z',
-          selector: 'undo:'
-        },
-        {
-          label: 'Redo',
-          accelerator: 'Shift+CmdOrCtrl+Z',
-          selector: 'redo:'
-        },
-        {
-          type: 'separator'
-        },
-        {
-          label: 'Cut',
-          accelerator: 'CmdOrCtrl+X',
-          selector: 'cut:'
-        },
-        {
-          label: 'Copy',
-          accelerator: 'CmdOrCtrl+C',
-          selector: 'copy:'
-        },
-        {
-          label: 'Paste',
-          accelerator: 'CmdOrCtrl+V',
-          selector: 'paste:'
-        },
-        {
-          label: 'Select All',
-          accelerator: 'CmdOrCtrl+A',
-          selector: 'selectAll:'
-        }
-      ]
-    },
-    {
-      label: 'View',
-      submenu: [{
-          role: 'toggledevtools'
-        },
-        {
-          type: 'separator'
-        },
-        {
-          role: 'resetzoom'
-        },
-        {
-          role: 'zoomin'
-        },
-        {
-          role: 'zoomout'
-        },
-        {
-          type: 'separator'
-        },
-        {
-          role: 'togglefullscreen'
-        }
-      ]
-    },
-    {
-      label: 'Go',
-      submenu: [{
-        role: 'reload'
-      }, {
-        role: 'forcereload'
-      }]
-    }
-  ];
-
-  var menu = Menu.buildFromTemplate(template);
-
-  Menu.setApplicationMenu(menu);
-}
-
-function macOSMenu() {
-  var template = [{
-      label: 'Gmail Desktop',
-      submenu: [{
-          label: 'About Gmail Desktop',
-          role: 'about'
-        },
-        {
-          type: 'separator'
-        },
-        {
-          label: 'Make Default Mail App',
-          type: 'checkbox',
-          checked: app.isDefaultProtocolClient('mailto'),
-          click() {
-            if (app.isDefaultProtocolClient('mailto')) {
-              app.removeAsDefaultProtocolClient('mailto');
-            } else {
-              app.setAsDefaultProtocolClient('mailto');
-            }
-          }
-        },
-        {
-          label: "Show Notifications",
-          type: 'checkbox',
-          checked: doNotifications,
-          click: () => {
-            doNotifications = !doNotifications;
-            store.set("notifications", doNotifications);
-          }
-        },
-        {
-          type: 'separator'
-        },
-        {
-          role: 'hide'
-        },
-        {
-          role: 'hideothers'
-        },
-        {
-          role: 'unhide'
-        },
-        {
-          type: 'separator'
-        },
-        {
-          role: 'quit'
-        }
-      ]
-    },
-    {
-      label: 'File',
-      submenu: [{
-        label: 'Print',
-        accelerator: 'CmdOrCtrl+P',
-        click: () => {
-          mainWindow.webContents.print({
-            "printBackground": true
-          });
-        }
-      }]
-    },
-    {
-      label: 'Edit',
-      submenu: [{
-          label: 'Undo',
-          accelerator: 'CmdOrCtrl+Z',
-          selector: 'undo:'
-        },
-        {
-          label: 'Redo',
-          accelerator: 'Shift+CmdOrCtrl+Z',
-          selector: 'redo:'
-        },
-        {
-          type: 'separator'
-        },
-        {
-          label: 'Cut',
-          accelerator: 'CmdOrCtrl+X',
-          selector: 'cut:'
-        },
-        {
-          label: 'Copy',
-          accelerator: 'CmdOrCtrl+C',
-          selector: 'copy:'
-        },
-        {
-          label: 'Paste',
-          accelerator: 'CmdOrCtrl+V',
-          selector: 'paste:'
-        },
-        {
-          label: 'Select All',
-          accelerator: 'CmdOrCtrl+A',
-          selector: 'selectAll:'
-        }
-      ]
-    },
-    {
-      label: 'View',
-      submenu: [{
-          role: 'toggledevtools'
-        },
-        {
-          type: 'separator'
-        },
-        {
-          role: 'resetzoom'
-        },
-        {
-          role: 'zoomin'
-        },
-        {
-          role: 'zoomout'
-        },
-        {
-          type: 'separator'
-        },
-        {
-          role: 'togglefullscreen'
-        }
-      ]
-    },
-    {
-      label: 'Go',
-      submenu: [{
-        role: 'reload'
-      }, {
-        role: 'forcereload'
-      }]
-    },
-    {
-      label: 'Window',
-      submenu: [{
-          label: 'Minimize',
-          accelerator: 'CmdOrCtrl+M',
-          selector: 'performMiniaturize:'
-        },
-        {
-          label: 'Close',
-          accelerator: 'CmdOrCtrl+W',
-          selector: 'performClose:'
-        },
-        {
-          type: 'separator'
-        },
-        {
-          label: 'Bring All to Front',
-          selector: 'arrangeInFront:'
-        }
-      ]
-    }
-  ];
-
-  var menu = Menu.buildFromTemplate(template);
-
-  Menu.setApplicationMenu(menu);
-}
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -397,7 +117,7 @@ function createWindow() {
   });
 
   ipc.on('notification', (evt, sender, subject) => {
-    if (doNotifications && Notification.isSupported()) {
+    if (shouldNotify() && Notification.isSupported()) {
       // Move the sound if it doesn't exist -- macOS only
       if (process.platform == "darwin") {
         const homedir = require('os').homedir();
@@ -426,9 +146,22 @@ function createWindow() {
       printBackground: true
     });
   });
+
+  ipc.on("made_toolbar", () => {
+    // Color logic for Windows
+    updateColor(mainWindow, electron.systemPreferences.getAccentColor());
+
+    electron.systemPreferences.on("accent-color-changed", (event, newColor) => {
+      updateColor(mainWindow, newColor);
+    });
+  });
 }
 
+
+
 function createMailto(url) {
+  app.focus();
+  mainWindow.focus();
   replyToWindow = new BrowserWindow({
     parent: mainWindow
   });
@@ -472,17 +205,10 @@ function init() {
 
   app.on('activate', function () {
     if (mainWindow === null) {
+      Menu.setApplicationMenu(Menu.buildFromTemplate(getMenuForOS(app, process.platform)));
       createWindow();
-      // Dynamically pick a menu-type
-      if (process.platform == "darwin") {
-        macOSMenu();
-      } else {
-        otherMenu();
-      }
     }
   });
-
-
 
   app.on('open-url', (event, url) => {
     event.preventDefault();
@@ -507,18 +233,12 @@ function init() {
       });
     }
 
-    doNotifications = store.get("notifications");
-
 
     if (process.platform == "darwin") {
       app.dock.bounce("critical");
     }
-    // Dynamically pick a   u-type
-    if (process.platform == "darwin") {
-      macOSMenu();
-    } else {
-      otherMenu();
-    }
+
+    Menu.setApplicationMenu(Menu.buildFromTemplate(getMenuForOS(app, process.platform)));
     createWindow();
   });
 }
