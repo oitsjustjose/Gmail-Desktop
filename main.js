@@ -149,11 +149,13 @@ function createWindow() {
 
   ipc.on("made_toolbar", () => {
     // Color logic for Windows
-    updateColor(mainWindow, electron.systemPreferences.getAccentColor());
+    if (process.platform == "win32") {
+      updateColor(mainWindow, electron.systemPreferences.getAccentColor());
 
-    electron.systemPreferences.on("accent-color-changed", (event, newColor) => {
-      updateColor(mainWindow, newColor);
-    });
+      electron.systemPreferences.on("accent-color-changed", (event, newColor) => {
+        updateColor(mainWindow, newColor);
+      });
+    }
   });
 }
 

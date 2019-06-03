@@ -99,8 +99,8 @@ function bootstrapHeader() {
 }
 
 window.addEventListener('load', () => {
-    // If *not* mac:
-    if (navigator.platform.toLowerCase().indexOf("mac") === -1) {
+    // If specifically Windows:
+    if (['Win32', 'Win64', 'Windows', 'WinCE'].includes(navigator.platform.toLowerCase())) {
         bootstrapHeader();
     }
     intvl = setInterval(findUnreads, 1000);
