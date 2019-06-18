@@ -71,21 +71,21 @@ body {
     display: none;
 }
 
-/* Reshape Search Bar */
-
-[gh$="sb"] {
-    /* padding-top: 16px !important; */
-    min-width: 192px !important;
-    max-height: 32px !important;
-}
-
-/* Search Icon */
+/* 
+    Search **icon** 
+    Yes, I know this doesn't make sense. 
+    But trust me, me, it is.
+*/
 
 [aria-label$="Search Mail"] {
     margin-top: -6px;
 }
 
-/* Search Text */
+/* 
+    Search Text 
+    This is truly different from the one above
+    I don't know what Google is thinking...
+*/
 
 [aria-label$="Search mail"] {
     margin-top: -6px;
@@ -93,13 +93,14 @@ body {
 
 /* Search results box */
 
-.gstl_50.gssb_c {
-    margin-top: -6px;
+[gh$="sb"] {
+    min-width: 192px !important;
+    max-height: 32px !important;
+    margin-top: -6px !important;
+    margin-bottom: 6px !important;
 }
 
-/* Clear Search Button 
-(This for some reason also fixes the search "Search Mail" text
- and search box text too...?) */
+/* Clear Search Button */
 
 [aria-label$="Clear search"] {
     margin-top: -6px;
