@@ -1,15 +1,16 @@
 /* Animations for loading Part I */
+
 @keyframes fadein {
     from {
         opacity: 0;
     }
-
     to {
         opacity: 1;
     }
 }
 
 /* Animations for loading Part II */
+
 body {
     height: 100%;
     background: rgb(40, 40, 40);
@@ -17,51 +18,61 @@ body {
 }
 
 /* gb_jd gb_zd gb_rd gb_Zb <-- this is DARK THEME */
+
 /* gb_jd gb_zd gb_rd <-- this is LIGHT THEME */
 
 /* Removes the popout tabby thing on the bottom right which allows you to open Keep */
+
 [role$="navigation"][aria-label$="Toggle side panel"] {
     display: None;
 }
 
 /* The footer information like size used, etc. */
+
 #\:2 {
     display: none;
 }
 
 /* Remove that mysterious line that isn't where I want it */
+
 .nH.w-asV.aiw {
     box-shadow: none;
 }
 
 /* Top bar component I */
+
 .aiw {
     /* padding: 4px; */
     max-height: 32px;
 }
 
 /* Top bar component II */
+
 [role$="banner"] {
     max-height: 48px !important;
     box-shadow: 0px 1px #777777 !important;
 }
 
 /* Removes the Gmail logo */
+
 [href$="#inbox"][title="Gmail"] {
     display: None;
 }
 
 /* Disable Google Apps */
+
 #gbwa {
     display: none;
 }
 
 /* Disable Help button */
+
 #lZwQje {
     display: none;
 }
 
 /* Reshape Search Bar */
+
 [gh$="sb"] {
     /* padding-top: 16px !important; */
     min-width: 192px !important;
@@ -69,42 +80,52 @@ body {
 }
 
 /* Search Icon */
+
 [aria-label$="Search Mail"] {
     margin-top: -6px;
 }
 
 /* Search Text */
+
 [aria-label$="Search mail"] {
     margin-top: -6px;
 }
 
 /* Search results box */
+
 .gstl_50.gssb_c {
     margin-top: -6px;
 }
 
-/* Clear Search Button */
-.gb_Ze.gb_1e {
+/* Clear Search Button 
+(This for some reason also fixes the search "Search Mail" text
+ and search box text too...?) */
+
+[aria-label$="Clear search"] {
     margin-top: -6px;
 }
 
 /* Search dropdown button */
+
 [aria-label$="Advanced search options"] {
     margin-top: -6px;
 }
 
 /* Google Notifications */
+
 #gbwa+div {
     display: none
 }
 
 /* The entire top area (dark theme) */
+
 .gb_jd.gb_zd.gb_rd.gb_Zb {
     margin-top: -10px;
     margin-bottom: 25px;
 }
 
 /* The entire top area (light theme) */
+
 .gb_jd.gb_zd.gb_rd:not(.gb_Zb) {
     margin-top: -10px;
     margin-bottom: 25px;
@@ -114,7 +135,6 @@ body {
     padding: 2px !important;
     margin-left: 18px !important;
 }
-
 
 gb_fa>.gb_Ea {
     padding: 0 !important;
@@ -159,50 +179,55 @@ gb_fa>.gb_Ea {
     -webkit-box-shadow: none !important;
 }
 
-.gb_x:active,
-.gb_x:focus,
-.gb_x:focus:hover {
+.gb_x:active, .gb_x:focus, .gb_x:focus:hover {
     background: transparent none !important;
 }
 
 /* Hamburger menu */
+
 [aria-label$="Main menu"] {
     margin-top: -6px !important;
 }
 
 /* Account icon */
+
 [data-ogsr-up] {
     margin-top: -6px !important;
 }
 
 /* This controls that wierd line that often cuts things off */
+
 .gb_id.gb_yd.gb_qd.gb_Xb {
     height: 72px !important;
     margin-top: -6px !important;
 }
 
 /* Account Changing Menu */
+
 .gb_Ta.gb_z.gb_7b {
     margin-top: -24px;
 }
 
 /* More Tools arrow */
+
 .brC-dA-I-Jw.brC-aMv-auO {
     display: None;
 }
 
 /* Print button (use native print) */
+
 [data-tooltip="Print all"] {
     display: None !important;
 }
 
 /* Hide open-in-new-window button */
+
 .J-N:last-of-type {
     display: None !important;
 }
 
-
 /* Custom titlebar for Windows & Linux */
+
 #GmailDesktopTitlebar {
     display: flex;
     justify-content: space-between;

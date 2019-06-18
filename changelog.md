@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.4.8.1:
+- More aria-label-based CSS injection for the search box
+
 ## 1.4.8:
 - Windows will now proper notifications and notification bubbles in the taskbar
 - Prevent window title from changing (fixes bug with double-pinning in Windows)
