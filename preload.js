@@ -100,7 +100,7 @@ function bootstrapHeader() {
 
 window.addEventListener('load', () => {
     // If specifically Windows:
-    if (['Win32', 'Win64', 'Windows', 'WinCE'].includes(navigator.platform.toLowerCase())) {
+    if (['win32', 'win64', 'Windows', 'WinCE'].includes(navigator.platform.toLowerCase())) {
         bootstrapHeader();
     }
     intvl = setInterval(findUnreads, 1000);
