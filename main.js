@@ -41,10 +41,6 @@ function createWindow() {
     addCustomCSS(mainWindow);
   });
 
-  mainWindow.on('closed', function (event) {
-    event.preventDefault();
-  });
-
   mainWindow.webContents.on('new-window', function (e, url) {
     e.preventDefault();
     if (url.indexOf("mail.google.com") != -1) {
