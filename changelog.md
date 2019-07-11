@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.4.10:
+- App will now `Quit` on macOS when window is closed, as this is now common behavior in native macOS apps (i.e. System Prefs, Messages)
+
 ## 1.4.8.1:
 - More aria-label-based CSS injection for the search box
 

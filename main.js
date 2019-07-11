@@ -196,9 +196,7 @@ function init() {
   app.on('window-all-closed', function () {
     mainWindow.webContents.session.flushStorageData();
     mainWindow = null;
-    if (process.platform !== "darwin") {
-      app.quit();
-    }
+    app.quit();
   });
 
   app.on('activate', function () {
