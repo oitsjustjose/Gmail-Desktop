@@ -145,10 +145,6 @@ gb_fa>.gb_Ea {
     border: 0 none !important;
 }
 
-.gb_ga {
-    display: none !important;
-}
-
 .gb_nc {
     text-align: right !important;
     width: 48px !important;
@@ -194,6 +190,29 @@ gb_fa>.gb_Ea {
 
 [data-ogsr-up] {
     margin-top: -6px !important;
+}
+
+/* Weird bubble around account icon for Uni accounts */
+
+.gb_ga.gb_xg.gb_f {
+    background-color: rgba(0, 0, 0, 0) !important;
+    border: none !important;
+    box-shadow: none !important;
+    width: 48px !important;
+}
+
+/* Special decoration for uni accounts */
+
+.gb_ha {
+    display: none !important;
+    width: 0px;
+    height: 0px;
+}
+
+/* Weird bubbling effect when clicking on uni account icon */
+
+.gb_ga.gb_xg.gb_f.gb_Ac {
+    box-shadow: none !important;
 }
 
 /* This controls that wierd line that often cuts things off */
