@@ -52,11 +52,7 @@ function createWindow() {
     }
   });
 
-  mainWindow.on('page-title-updated', (evt) => {
-    evt.preventDefault();
-
-  });
-
+  // Stuff for the custom titlebar in Windows
   ipc.on('menu', function (evt, x, y) {
     Menu.getApplicationMenu().popup({
       x: Math.ceil(x),
@@ -129,7 +125,12 @@ function createWindow() {
         sound: "gmail"
       });
       notification.onclick = () => {
-        app.focus();
+        if (mainWindow.isMinimized()) {
+          mainWindow.restore();
+        }
+        if (!mainWindow.isVisible()) {
+          mainWindow.show();
+        }
         mainWindow.focus();
       };
       notification.show();
@@ -227,11 +228,6 @@ function init() {
         shouldShowMenu: true,
         showInspectElement: true
       });
-    }
-
-
-    if (process.platform == "darwin") {
-      app.dock.bounce("critical");
     }
 
     Menu.setApplicationMenu(Menu.buildFromTemplate(getMenuForOS(app, process.platform)));
