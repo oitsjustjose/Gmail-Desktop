@@ -30,4 +30,4 @@ function updateColor(mainWindow, color) {
 
 module.exports = {
     "updateColor": updateColor
-}
+};
