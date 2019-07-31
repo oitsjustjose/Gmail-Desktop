@@ -194,7 +194,7 @@ gb_fa>.gb_Ea {
 
 /* Weird bubble around account icon for Uni accounts */
 
-.gb_ga.gb_xg.gb_f {
+.gb_ia.gb_yg.gb_g {
     background-color: rgba(0, 0, 0, 0) !important;
     border: none !important;
     box-shadow: none !important;
@@ -203,7 +203,7 @@ gb_fa>.gb_Ea {
 
 /* Special decoration for uni accounts */
 
-.gb_ha {
+.gb_ja {
     display: none !important;
     width: 0px;
     height: 0px;
