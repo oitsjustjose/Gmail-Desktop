@@ -10,8 +10,11 @@ const Notification = require('electron').Notification;
 const WinBadge = require('electron-windows-badge');
 const Menu = electron.Menu;
 
-const getMenuForOS = require("./menus.js").getMenu;
-const shouldNotify = require("./menus.js").shouldNotify;
+const getMenuForOS = require("./utils.js").getMenu;
+const shouldNotify = require("./utils.js").shouldNotify;
+const updateWindowCoords = require("./utils.js").updateWindowCoords;
+const updateWindowDims = require("./utils.js").updateWindowDims;
+const getWindowData = require("./utils.js").getWindowData;
 const updateColor = require('./colors.js').updateColor;
 
 let mainWindow;
@@ -19,10 +22,14 @@ let winBadge;
 
 
 function createWindow() {
+  var windowMeta = getWindowData();
+
   mainWindow = new BrowserWindow({
     title: 'Gmail Desktop',
-    width: 800,
-    height: 600,
+    width: windowMeta.width,
+    height: windowMeta.height,
+    x: windowMeta.x,
+    y: windowMeta.y,
     frame: process.platform != "darwin" && process.platform != "win32",
     titleBarStyle: 'hidden',
     icon: path.join(__dirname, 'assets', 'icons', 'png', 'gmail.png'),
@@ -41,7 +48,7 @@ function createWindow() {
     addCustomCSS(mainWindow);
   });
 
-  mainWindow.webContents.on('new-window', function (e, url) {
+  mainWindow.webContents.on('new-window', (e, url) => {
     e.preventDefault();
     if (url.indexOf("mail.google.com") != -1) {
       mainWindow.loadURL(url);
@@ -50,8 +57,18 @@ function createWindow() {
     }
   });
 
+  mainWindow.on("move", (event) => {
+    var bounds = mainWindow.getBounds();
+    updateWindowCoords(bounds.x, bounds.y);
+  });
+
+  mainWindow.on("resize", (event) => {
+    var bounds = mainWindow.getBounds();
+    updateWindowDims(bounds.width, bounds.height);
+  });
+
   // Stuff for the custom titlebar in Windows
-  ipc.on('menu', function (evt, x, y) {
+  ipc.on('menu', (evt, x, y) => {
     Menu.getApplicationMenu().popup({
       x: Math.ceil(x),
       y: Math.ceil(y)
@@ -136,7 +153,6 @@ function createWindow() {
   });
 
   ipc.on('print', () => {
-    alert("IPC Renderer got function `print`");
     mainWindow.webContents.print({
       printBackground: true
     });
@@ -192,7 +208,7 @@ function addCustomCSS(windowElement) {
 function init() {
   app.setName("Gmail Desktop");
 
-  app.on('window-all-closed', function () {
+  app.on('window-all-closed', () => {
     mainWindow.webContents.session.flushStorageData();
     mainWindow = null;
     if (process.platform !== "darwin") {
@@ -200,7 +216,11 @@ function init() {
     }
   });
 
-  app.on('activate', function () {
+  app.on('before-quit', (event) => {
+    mainWindow.webContents.session.flushStorageData();
+  });
+
+  app.on('activate', () => {
     if (mainWindow === null) {
       Menu.setApplicationMenu(Menu.buildFromTemplate(getMenuForOS(app, process.platform)));
       createWindow();
@@ -212,13 +232,13 @@ function init() {
     if (app.isReady()) {
       createMailto(url);
     } else {
-      app.on('ready', function () {
+      app.on('ready', () => {
         createMailto(url);
       });
     }
   });
 
-  app.on('ready', function () {
+  app.on('ready', () => {
     if (app.isPackaged) {
       contextMenu({
         shouldShowMenu: true
