@@ -45,8 +45,6 @@ function createWindow() {
     e.preventDefault();
     if (url.indexOf("mail.google.com") != -1) {
       mainWindow.loadURL(url);
-      addCustomCSS(mainWindow);
-      mainWindow.webContents.session.flushStorageData();
     } else {
       shell.openExternal(url);
     }
@@ -197,7 +195,9 @@ function init() {
   app.on('window-all-closed', function () {
     mainWindow.webContents.session.flushStorageData();
     mainWindow = null;
-    app.quit();
+    if (process.platform !== "darwin") {
+      app.quit();
+    }
   });
 
   app.on('activate', function () {
