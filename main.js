@@ -110,15 +110,15 @@ function createWindow() {
     mainWindow.focus();
   });
 
-  if (process.platform == "win32") {
+  if (process.platform == "win32" && mainWindow !== null) {
     winBadge = new WinBadge(mainWindow, {});
   }
 
   ipc.on('unread', (evt, unreadCount) => {
     // Still update the badge regardless
-    if (process.platform == "darwin") {
+    if (process.platform == "darwin" && mainWindow !== null) {
       app.dock.setBadge(unreadCount ? ('' + unreadCount) : '');
-    } else if (process.platform == "win32") {
+    } else if (process.platform == "win32" && mainWindow !== null) {
       winBadge.update(unreadCount);
     }
   });
