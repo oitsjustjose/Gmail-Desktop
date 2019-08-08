@@ -93,17 +93,15 @@ function createWindow() {
 
   mainWindow.on('maximize', () => {
     mainWindow.webContents.executeJavaScript(
-      `document.getElementById('gmailDesktopMaximize').setAttribute("ismax", 0);
-      document.getElementById('gmailDesktopMaximize').setAttribute("src", "https://raw.githubusercontent.com/oitsjustjose/Gmail-Desktop/master/assets/restore.png");`
+      `document.getElementById('gmailDesktopMaximize').setAttribute("ismax", 0);`
     );
   });
 
   mainWindow.on("unmaximize", () => {
     mainWindow.webContents.executeJavaScript(
-      `document.getElementById('gmailDesktopMaximize').setAttribute("ismax",1);
-      document.getElementById('gmailDesktopMaximize').setAttribute("src", "https://raw.githubusercontent.com/oitsjustjose/Gmail-Desktop/master/assets/maximize.png");`
+      `document.getElementById('gmailDesktopMaximize').setAttribute("ismax",1);`
     );
-  })
+  });
 
   mainWindow.once('ready-to-show', () => {
     mainWindow.show();

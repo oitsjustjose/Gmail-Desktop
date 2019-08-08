@@ -4,6 +4,7 @@
     from {
         opacity: 0;
     }
+
     to {
         opacity: 1;
     }
@@ -176,7 +177,9 @@ gb_fa>.gb_Ea {
     -webkit-box-shadow: none !important;
 }
 
-.gb_x:active, .gb_x:focus, .gb_x:focus:hover {
+.gb_x:active,
+.gb_x:focus,
+.gb_x:focus:hover {
     background: transparent none !important;
 }
 
@@ -259,76 +262,58 @@ gb_fa>.gb_Ea {
     background-color: #7F7F7F;
 }
 
-#GoogleDesktopTitlebarText {
-    max-height: 24px;
+#GmailDesktopWindowControlsWrapper {
     display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
-    margin-top: 8px !important;
-}
-
-#GoogleDesktopTitlebarLogo {
-    max-height: 24px;
-    max-width: 24px;
+    height: 32px;
     padding-right: 8px;
-    margin-top: -4px !important;
 }
 
 #GmailDesktopWindowControls {
     display: flex;
     justify-content: right;
-    padding-top: 4px;
-    padding-right: 4px;
+    flex-direction: row;
+    max-width: 96px;
+    max-height: 32px;
 }
 
 #gmailDesktopOptions {
-    display: flex;
     -webkit-app-region: no-drag;
-    max-width: 24px;
-    max-height: 24px;
-    padding-top: 4px;
+    max-height: 32px;
+    max-width: 32px;
+    height: 32px;
+    width: 32px;
+    opacity: .6;
 }
 
 #gmailDesktopOptions:hover {
-    filter: invert(100%);
-    -webkit-filter: invert(100%) !important;
-    margin-top: -1px;
+    opacity: 1;
+    background-color: hsla(0, 0%, 100%, .05)
 }
 
-#gmailDesktopMinimize {
-    -webkit-app-region: no-drag;
-    max-width: 24px;
-    max-height: 24px;
-    padding-right: 8px;
+.winButton {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    pointer-events: auto;
+    max-height: 32px;
+    max-width: 32px;
+    height: 32px;
+    width: 32px;
+    opacity: .6 !important;
+    -webkit-app-region: no-drag
 }
 
-#gmailDesktopMinimize:hover {
-    filter: invert(100%);
-    -webkit-filter: invert(100%) !important;
-    margin-top: -1px;
+.winButton:hover {
+    opacity: 1 !important;
+    background-color: hsla(0, 0%, 100%, .05)
 }
 
-#gmailDesktopMaximize {
-    -webkit-app-region: no-drag;
-    max-width: 24px;
-    max-height: 24px;
-    padding-right: 8px;
-}
 
-#gmailDesktopMaximize:hover {
-    filter: invert(100%);
-    -webkit-filter: invert(100%) !important;
-    margin-top: -1px;
-}
-
-#gmailDesktopClose {
-    -webkit-app-region: no-drag;
-    max-width: 24px;
-    max-height: 24px;
-    padding-right: 8px;
-}
-
-#gmailDesktopClose:hover {
-    filter: invert(100%);
-    -webkit-filter: invert(100%) !important;
-    margin-top: -1px;
+.winButton.close:hover {
+    opacity: 1;
+    background-color: #f04747 !important;
 }
