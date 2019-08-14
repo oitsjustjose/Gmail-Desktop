@@ -17,15 +17,16 @@
     "Mail",
     "Gmail"
   ],
-  "author": "oitsjustjose",
+  "author": "Jose Stovall [oitsjustjose]",
   "license": "CC0-1.0",
   "devDependencies": {
-    "electron": "^4.2.8",
+    "electron": "^4.2.9",
     "electron-builder": "^20.44.4"
   },
   "dependencies": {
     "electron-context-menu": "^0.12.1",
-    "electron-log": "^3.0.6",
+    "electron-dl": "^1.14.0",
+    "electron-log": "^3.0.7",
     "electron-windows-badge": "^1.0.5",
     "element-ready": "^3.1.0",
     "jshint": "^2.10.2"
