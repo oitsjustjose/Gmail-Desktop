@@ -4,7 +4,6 @@
     from {
         opacity: 0;
     }
-
     to {
         opacity: 1;
     }
@@ -177,9 +176,7 @@ gb_fa>.gb_Ea {
     -webkit-box-shadow: none !important;
 }
 
-.gb_x:active,
-.gb_x:focus,
-.gb_x:focus:hover {
+.gb_x:active, .gb_x:focus, .gb_x:focus:hover {
     background: transparent none !important;
 }
 
@@ -204,13 +201,17 @@ gb_fa>.gb_Ea {
     width: 48px !important;
 }
 
-/* Special decoration for uni accounts */
-
-.gb_ja {
+.gb_ja.gb_Bg.gb_g>.gb_ka {
     display: none !important;
-    width: 0px;
-    height: 0px;
 }
+
+.gb_ja.gb_Bg.gb_g {
+    background-color: rgb(0,0,0,0) !important;
+    border: none !important;
+    width: inherit !important;
+}
+
+
 
 /* Weird bubbling effect when clicking on uni account icon */
 
@@ -227,8 +228,8 @@ gb_fa>.gb_Ea {
 
 /* Account Changing Menu */
 
-.gb_Ta.gb_z.gb_7b {
-    margin-top: -24px;
+[aria-label$="Account Information"] {
+    margin-top: -16px;
 }
 
 /* More Tools arrow */
@@ -239,7 +240,7 @@ gb_fa>.gb_Ea {
 
 /* Print button (use native print) */
 
-[data-tooltip="Print all"] {
+[data-tooltip$="Print all"] {
     display: None !important;
 }
 
@@ -311,7 +312,6 @@ gb_fa>.gb_Ea {
     opacity: 1 !important;
     background-color: hsla(0, 0%, 100%, .05)
 }
-
 
 .winButton.close:hover {
     opacity: 1;
