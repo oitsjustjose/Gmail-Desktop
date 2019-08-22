@@ -6,7 +6,9 @@ Added:
 
 - **[Windows]** Better, more windows-like window controls with better color adaptation
 
-- Automatically pull styling from GitHub, preventing new releases every time Google fucks up some CSS classnames
+Fixed: 
+
+- CSS, again :|
 
 ## 1.5.0
 
