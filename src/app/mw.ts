@@ -55,18 +55,6 @@ export default () => {
         Utils.setWindow(x, y, width, height)
     })
 
-    mw.on('maximize', () => {
-        mw?.webContents.executeJavaScript(
-            `document.getElementById("gmailDesktopMaximize").setAttribute("ismax", 0);`
-        )
-    })
-
-    mw.on('unmaximize', () => {
-        mw?.webContents.executeJavaScript(
-            `document.getElementById("gmailDesktopMaximize").setAttribute("ismax",1);`
-        )
-    })
-
     mw.once('ready-to-show', () => {
         mw?.show()
         mw?.focus()
