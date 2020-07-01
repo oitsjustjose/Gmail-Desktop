@@ -1,5 +1,5 @@
 {
-  "name": "Gmail-Desktop",
+  "name": "gmail_desktop",
   "version": "1.5.1",
   "description": "A cross-platform dedicated Gmail application, fully fledged with notifications, multi-account support and more. Streamlined for most platforms",
   "main": "main.js",
@@ -20,19 +20,23 @@
   "author": "Jose Stovall [oitsjustjose]",
   "license": "CC0-1.0",
   "devDependencies": {
-    "electron": "^4.2.9",
+    "electron": "^4.2.12",
     "electron-builder": "^20.44.4"
   },
   "dependencies": {
+    "@types/electron": "^1.6.10",
+    "@types/element-ready": "^2.1.1",
     "electron-context-menu": "^0.12.1",
     "electron-dl": "^1.14.0",
-    "electron-log": "^3.0.7",
+    "electron-log": "^3.0.9",
     "electron-windows-badge": "^1.0.5",
     "element-ready": "^3.1.0",
-    "jshint": "^2.10.2"
+    "typescript": "^3.9.5"
   },
   "build": {
     "appId": "com.oitsjustjose.gmaildesktop",
+    "artifactName": "Gmail Desktop-${version}.${ext}",
+    "productName": "Gmail Desktop",
     "appImage": {
       "category": "public.app-category.productivity"
     },
