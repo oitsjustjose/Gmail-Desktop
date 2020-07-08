@@ -19,7 +19,7 @@ export default () => {
         frame: process.platform != 'darwin' && process.platform != 'win32',
         titleBarStyle: 'hidden',
         transparent: process.platform == 'darwin',
-        icon: path.join(__dirname, 'assets', 'icons', 'png', 'gmail.png'),
+        icon: path.resolve(`${path.dirname(require.main!.filename)}/../assets/icons/png/gmail.png`),
         show: process.platform != 'darwin',
         webPreferences: {
             nodeIntegration: false,

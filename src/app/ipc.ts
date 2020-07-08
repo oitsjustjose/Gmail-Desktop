@@ -77,7 +77,9 @@ const soundCheck = () => {
     if (shouldNotify() && Notification.isSupported()) {
         if (process.platform == 'darwin') {
             if (!fs.existsSync(`${homedir()}/Library/Sounds/gmail.caf`)) {
-                fs.copyFileSync(path.join(__dirname, 'assets', 'sounds', 'mail-sent.caf'), `${homedir()}/Library/Sounds/gmail.caf`)
+                fs.copyFileSync(
+                    path.resolve(`${path.dirname(require.main!.filename)}/../assets/sounds/mail-sent.caf`), `${homedir()}/Library/Sounds/gmail.caf`
+                )
             }
         }
     }
