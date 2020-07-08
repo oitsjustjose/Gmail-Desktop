@@ -12,7 +12,7 @@ electron-builder . --win
 
 echo "Building for macOS"
 
-electron-builder .
+electron-builder . --mac
 
 echo "Building for Linux"
 
