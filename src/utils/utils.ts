@@ -73,24 +73,24 @@ const menu = (app: App) => {
         }, {
             role: 'paste'
         }, {
-            role: 'pasteandmatchstyle'
+            role: 'pasteAndMatchStyle'
         }, {
             role: 'delete'
         }, {
-            role: 'selectall'
+            role: 'selectAll'
         }]
     }, {
         label: 'View',
         submenu: [{
-            role: 'toggledevtools'
+            role: 'toggleDevTools'
         }, {
             type: 'separator'
         }, {
-            role: 'resetzoom'
+            role: 'resetZoom'
         }, {
-            role: 'zoomin'
+            role: 'zoomIn'
         }, {
-            role: 'zoomout'
+            role: 'zoomOut'
         }, {
             type: 'separator'
         }, {
@@ -101,7 +101,7 @@ const menu = (app: App) => {
         submenu: [{
             role: 'reload'
         }, {
-            role: 'forcereload'
+            role: 'forceReload'
         }]
     }]
 
@@ -142,7 +142,7 @@ const macOsMenu = (app: App) => {
         }, {
             role: 'hide'
         }, {
-            role: 'hideothers'
+            role: 'hideOthers'
         }, {
             role: 'unhide'
         }, {
@@ -165,24 +165,24 @@ const macOsMenu = (app: App) => {
         }, {
             role: 'paste'
         }, {
-            role: 'pasteandmatchstyle'
+            role: 'pasteAndMatchStyle'
         }, {
             role: 'delete'
         }, {
-            role: 'selectall'
+            role: 'selectAll'
         }]
     }, {
         label: 'View',
         submenu: [{
-            role: 'toggledevtools'
+            role: 'toggleDevTools'
         }, {
             type: 'separator'
         }, {
-            role: 'resetzoom'
+            role: 'resetZoom'
         }, {
-            role: 'zoomin'
+            role: 'zoomIn'
         }, {
-            role: 'zoomout'
+            role: 'zoomOut'
         }, {
             type: 'separator'
         }, {
@@ -193,7 +193,7 @@ const macOsMenu = (app: App) => {
         submenu: [{
             role: 'reload'
         }, {
-            role: 'forcereload'
+            role: 'forceReload'
         }]
     }, {
         label: 'Window',

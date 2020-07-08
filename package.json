@@ -20,7 +20,7 @@
   "author": "Jose Stovall [oitsjustjose]",
   "license": "CC0-1.0",
   "devDependencies": {
-    "electron": "^4.2.12",
+    "electron": "^9.1.0",
     "electron-builder": "^20.44.4"
   },
   "dependencies": {
@@ -31,7 +31,7 @@
     "electron-log": "^3.0.9",
     "electron-windows-badge": "^1.0.5",
     "element-ready": "^3.1.0",
-    "typescript": "^3.9.5"
+    "typescript": "^3.9.6"
   },
   "build": {
     "appId": "com.oitsjustjose.gmaildesktop",
