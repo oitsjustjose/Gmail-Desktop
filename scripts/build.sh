@@ -2,6 +2,10 @@ echo "Cleaning"
 
 rm -rf ./dist
 
+echo "Compiling TypeScript"
+
+tsc
+
 echo "Building for Windows"
 
 electron-builder . --win
@@ -16,8 +20,6 @@ electron-builder . --linux
 
 electron-builder . --linux snap
 
-snapcraft push --release=stable dist/Gmail-Desktop_*.snap
+# snapcraft push --release=stable dist/Gmail-Desktop_*.snap
 
 echo "Done!"
-
-open ./dist
