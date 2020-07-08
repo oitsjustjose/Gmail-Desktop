@@ -1,7 +1,0 @@
-{
-    "java.configuration.updateBuildConfiguration": "automatic",
-    "code-runner.executorMap": {
-        "javascript": "cd '$workspaceRoot' && electron ."
-    },
-    "code-runner.defaultLanguage": "javascript"
-}
