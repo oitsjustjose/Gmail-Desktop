@@ -2,10 +2,12 @@
   "name": "gmail_desktop",
   "version": "1.5.1",
   "description": "A cross-platform dedicated Gmail application, fully fledged with notifications, multi-account support and more. Streamlined for most platforms",
-  "main": "main.js",
+  "main": "./js/main.js",
   "scripts": {
-    "start": "electron .",
-    "build": "sh build.sh"
+    "dist": "electron-builder",
+    "dev": "tsc && electron ./js/app",
+    "build": "tsc",
+    "clean": "rm -r node_modules && rm -r js"
   },
   "repository": {
     "type": "GitHub",
