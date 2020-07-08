@@ -16,22 +16,6 @@ export const init = (app: App, mw: BrowserWindow) => {
         })
     })
 
-    ipcMain.on('exit', () => {
-        mw.close()
-    })
-
-    ipcMain.on('unmaximize', () => {
-        mw.unmaximize()
-    })
-
-    ipcMain.on('maximize', () => {
-        mw.maximize()
-    })
-
-    ipcMain.on('minimize', () => {
-        mw.minimize()
-    })
-
     ipcMain.on('unread', (_: any, cnt: number) => {
         if (process.platform == 'darwin' && mw) {
             app.dock.setBadge(cnt ? `${cnt}` : ``)

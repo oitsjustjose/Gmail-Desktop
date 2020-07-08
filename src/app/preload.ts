@@ -1,4 +1,4 @@
-import { ipcRenderer as ipc } from 'electron'
+import { ipcRenderer as ipc, remote } from 'electron'
 
 let lastUnread: number = 0
 let unreadSubjects: Array<string> = Array()
@@ -86,7 +86,9 @@ const injectHeader = () => {
     minimize.className = 'winButton'
     minimize.innerHTML = `<svg name="TitleBarMinimize" aria-hidden="false" width="50%" height="50%" viewBox="0 0 12 12"><rect  width="10" height="1" x="1" y="6"> </rect></svg>`
     minimize.addEventListener('click', (_) => {
-        ipc.send('minimize')
+        if (remote.getCurrentWindow().minimizable) {
+            remote.getCurrentWindow().minimize()
+        }
     })
 
     const maximize = document.createElement('div')
@@ -97,11 +99,10 @@ const injectHeader = () => {
     maximize.addEventListener('click', (_) => {
         const currentAttr = maximize.getAttribute('ismax')
         if (currentAttr == '1') {
-            ipc.send('maximize')
+            remote.getCurrentWindow().maximize()
         } else {
-            ipc.send('unmaximize')
+            remote.getCurrentWindow().unmaximize()
         }
-
         maximize.setAttribute('ismax', currentAttr == '1' ? '0' : '1')
     })
 
@@ -109,7 +110,9 @@ const injectHeader = () => {
     close.className = 'winButton'
     close.innerHTML = `<svg name="TitleBarClose" aria-hidden="false" width="50%" height="50%" viewBox="0 0 12 12"><polygon  points="11 1.576 6.583 6 11 10.424 10.424 11 6 6.583 1.576 11 1 10.424 5.417 6 1 1.576 1.576 1 6 5.417 10.424 1"></polygon></svg>`
     close.addEventListener('click', (_) => {
-        ipc.send('exit')
+        if (remote.getCurrentWindow().closable) {
+            remote.getCurrentWindow().close()
+        }
     })
 
     windowCtrls.appendChild(minimize)
