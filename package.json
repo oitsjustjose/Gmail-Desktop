@@ -1,5 +1,5 @@
 {
-  "name": "gmail-desktop",
+  "name": "gmail_desktop",
   "version": "2.0.0",
   "description": "A cross-platform dedicated Gmail application, fully fledged with notifications, multi-account support and more. Streamlined for most platforms",
   "main": "./js/app.js",
@@ -24,9 +24,7 @@
   "license": "CC0-1.0",
   "devDependencies": {
     "electron": "^9.1.0",
-    "electron-builder": "^20.44.4"
-  },
-  "dependencies": {
+    "electron-builder": "^22.7.0",
     "@types/electron": "^1.6.10",
     "@types/element-ready": "^2.1.1",
     "electron-context-menu": "^0.12.1",
@@ -37,6 +35,7 @@
     "typescript": "^3.9.6"
   },
   "build": {
+    "extends": null,
     "appId": "com.oitsjustjose.gmaildesktop",
     "artifactName": "Gmail Desktop-${version}.${ext}",
     "productName": "Gmail Desktop",
@@ -45,7 +44,9 @@
     },
     "mac": {
       "category": "public.app-category.productivity",
-      "icon": "assets/icons/macOS/gmail.icns"
+      "icon": "assets/icons/macOS/gmail.icns",
+      "darkModeSupport": true,
+      "hardenedRuntime": true
     },
     "win": {
       "icon": "assets/icons/win/gmail.ico"
