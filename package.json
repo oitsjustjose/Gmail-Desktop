@@ -25,14 +25,16 @@
   "devDependencies": {
     "electron": "^9.1.0",
     "electron-builder": "^22.7.0",
+    "typescript": "^3.9.6",
     "@types/electron": "^1.6.10",
-    "@types/element-ready": "^2.1.1",
-    "electron-context-menu": "^0.12.1",
+    "@types/element-ready": "^2.1.1"
+  },
+  "dependencies": {
+    "electron-context-menu": "^2.1.0",
     "electron-dl": "^1.14.0",
     "electron-log": "^3.0.9",
     "electron-windows-badge": "^1.0.5",
-    "element-ready": "^3.1.0",
-    "typescript": "^3.9.6"
+    "element-ready": "^3.1.0"
   },
   "build": {
     "extends": null,
