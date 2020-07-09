@@ -1,5 +1,17 @@
 # Changelog
 
+## 2.0.1
+
+### Fixed
+
+- Titlebar issues on Windows
+
+### Changed
+
+- New Titlebar icons!
+- Custom titlebar now works (though the color may not) on Linux
+
+
 ## 2.0.0
 
 ### Changed
