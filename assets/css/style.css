@@ -313,6 +313,11 @@ gb_fa>.gb_Ea {
     background-color: hsla(0, 0%, 100%, .05)
 }
 
+.winButton.options:hover {
+    opacity: 1;
+    background-color: #00bee0 !important;
+}
+
 .winButton.close:hover {
     opacity: 1;
     background-color: #f04747 !important;

@@ -1,4 +1,4 @@
-import { App, BrowserWindow, ipcMain, Menu, Notification, systemPreferences } from 'electron'
+import { App, BrowserWindow, ipcMain, Notification, systemPreferences } from 'electron'
 import WinBadge from 'electron-windows-badge'
 import fs from 'fs'
 import { homedir } from 'os'
@@ -9,13 +9,6 @@ import { shouldNotify } from '../utils/utils'
 let badge: any | null = null
 
 export const init = (app: App, mw: BrowserWindow) => {
-    ipcMain.on('menu', (_: any, x: number, y: number) => {
-        Menu.getApplicationMenu()!.popup({
-            x: Math.ceil(x),
-            y: Math.ceil(y)
-        })
-    })
-
     ipcMain.on('unread', (_: any, cnt: number) => {
         if (process.platform == 'darwin' && mw) {
             app.dock.setBadge(cnt ? `${cnt}` : ``)
