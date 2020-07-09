@@ -6,4 +6,5 @@ docker run --rm -ti \
  -v ${PWD##*/}-node-modules:/project/node_modules \
  -v ~/.cache/electron:/root/.cache/electron \
  -v ~/.cache/electron-builder:/root/.cache/electron-builder \
+ -v ${PWD}/scripts/bashrc:/root/.bashrc \
  electronuserland/builder:wine
