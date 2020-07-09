@@ -4,11 +4,14 @@
   "description": "A cross-platform dedicated Gmail application, fully fledged with notifications, multi-account support and more. Streamlined for most platforms",
   "main": "./js/app.js",
   "scripts": {
-    "dist": "sh ./scripts/build.sh",
     "dev": "tsc && electron ./js/app",
     "build": "tsc",
     "clean": "rm -r node_modules && rm -r js",
-    "docker": "$SHELL ./scripts/docker.sh"
+    "dist": "sh ./scripts/build.sh",
+    "dist:mac": "electron-builder --mac",
+    "dist:allother": "$SHELL ./scripts/docker.sh",
+    "dist:snapcraft": "snapcraft push --release=stable ./dist/Gmail\\ Desktop-*.snap",
+    "dist:all": "npm run dist:allother; npm run dist:mac; npm run dist:snapcraft"
   },
   "repository": {
     "type": "GitHub",

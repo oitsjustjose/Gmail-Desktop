@@ -17,5 +17,5 @@ electron-builder --linux
 electron-builder --linux snap
 
 echo "Done building, remember to push to snapcraft as well as build for macOS"
-echo "Build for macOS using 'npx electron-builder --mac'"
-echo "Push to SnapCraft using 'snapcraft push --release=stable dist/Gmail-Desktop_*.snap'"
+echo "Build for macOS using 'npm run dist:mac'"
+echo "Push to SnapCraft using 'npm run dist:snapcraft'"
