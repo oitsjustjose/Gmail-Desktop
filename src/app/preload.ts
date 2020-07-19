@@ -1,15 +1,15 @@
-import { ipcRenderer as ipc, remote } from 'electron'
+import { ipcRenderer as ipc, remote, BrowserWindowProxy } from 'electron'
 
 let lastUnread: number = 0
 let unreadSubjects: Array<string> = Array()
 let unreadSenders: Array<string> = Array()
 
 const icns = {
-    close: 'https://raw.githubusercontent.com/oitsjustjose/Gmail-Desktop/master/assets/menu/icons8-close-window-96.png',
-    maximize: 'https://raw.githubusercontent.com/oitsjustjose/Gmail-Desktop/master/assets/menu/icons8-maximize-window-96.png',
-    restore: 'https://raw.githubusercontent.com/oitsjustjose/Gmail-Desktop/master/assets/menu/icons8-restore-window-96.png',
-    minimize: 'https://raw.githubusercontent.com/oitsjustjose/Gmail-Desktop/master/assets/menu/icons8-minimize-window-96.png',
-    options: 'https://raw.githubusercontent.com/oitsjustjose/Gmail-Desktop/master/assets/menu/icons8-toggle-off-96.png'
+    close: 'https://raw.githubusercontent.com/oitsjustjose/Gmail-Desktop/master/assets/menu/close.png',
+    maximize: 'https://raw.githubusercontent.com/oitsjustjose/Gmail-Desktop/master/assets/menu/maximize.png',
+    restore: 'https://raw.githubusercontent.com/oitsjustjose/Gmail-Desktop/master/assets/menu/restore.png',
+    minimize: 'https://raw.githubusercontent.com/oitsjustjose/Gmail-Desktop/master/assets/menu/minimize.png',
+    options: 'https://raw.githubusercontent.com/oitsjustjose/Gmail-Desktop/master/assets/menu/menu.png'
 }
 
 const searchUnread = () => {
@@ -30,6 +30,24 @@ const searchUnread = () => {
     }
 
     lastUnread = unreadCnt
+}
+
+const initMaximizeHandlers = () => {
+    remote.getCurrentWindow().on('maximize', () => {
+        const maximize = document.querySelector('.maximize.winButton') as HTMLImageElement
+        if (!maximize) {
+            return
+        }
+        maximize.src = icns.restore
+    })
+
+    remote.getCurrentWindow().on('unmaximize', () => {
+        const maximize = document.querySelector('.maximize.winButton') as HTMLImageElement
+        if (!maximize) {
+            return
+        }
+        maximize.src = icns.maximize
+    })
 }
 
 const fetchSubjects = () => {
@@ -75,7 +93,7 @@ const fetchSubjects = () => {
 }
 
 const injectHeader = () => {
-    const header = document.createElement('div')
+    const header = document.createElement('header')
     header.id = 'GmailDesktopTitlebar'
 
     const options = document.createElement('img')
@@ -104,26 +122,21 @@ const injectHeader = () => {
     })
 
     const maximize = document.createElement('img')
-    maximize.className = 'winButton'
-    maximize.setAttribute('ismax', '1')
+    maximize.className = 'maximize winButton'
     maximize.src = icns.maximize
     maximize.addEventListener('click', (_) => {
-        const currentAttr = maximize.getAttribute('ismax')
-        if (currentAttr == '1') {
-            remote.getCurrentWindow().maximize()
-            maximize.src = icns.restore
-        } else {
+        if (remote.getCurrentWindow().isMaximized()) {
             remote.getCurrentWindow().unmaximize()
-            maximize.src = icns.maximize
+        } else {
+            remote.getCurrentWindow().maximize()
         }
-        maximize.setAttribute('ismax', currentAttr == '1' ? '0' : '1')
     })
 
     const close = document.createElement('img')
     close.className = 'winButton close'
     close.src = icns.close
     close.addEventListener('click', (_) => {
-        if (remote.getCurrentWindow().closable) {
+        if (remote.getCurrentWindow().isClosable()) {
             remote.getCurrentWindow().close()
         }
     })
@@ -135,14 +148,18 @@ const injectHeader = () => {
     header.appendChild(options)
     header.appendChild(windowCtrlWrapper)
 
-    document.body.insertBefore(header, document.body.childNodes[0])
+    /* As weird as it is, the menubar works best *adjacent* to the <body> tag... */
+    document.body.insertAdjacentElement("beforebegin", header)
+    document.body.classList.add('withWinTitlebar')
 
     ipc.send('made_toolbar')
 }
 
+
 window.addEventListener('load', () => {
     if (remote.process.platform != 'darwin') {
         injectHeader()
+        initMaximizeHandlers()
     }
 
     setInterval(searchUnread, 500)

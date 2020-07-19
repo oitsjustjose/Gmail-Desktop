@@ -13,19 +13,7 @@ const getFgColor = (bgAsHex: string) => {
 }
 
 export const updateColor = (mw: BrowserWindow, bgAsHex: string) => {
-    const fg = getFgColor(bgAsHex)
-
     mw.webContents.executeJavaScript(
         `document.getElementById("GmailDesktopTitlebar").style.backgroundColor = "#${bgAsHex}";`
     )
-
-    mw.webContents.executeJavaScript(
-        `document.getElementById('GmailDesktopTitlebar).style.color="${fg}";`
-    )
-
-    mw.webContents.executeJavaScript(`
-        document.getElementById("GmailDesktopWindowControls").style.stroke="${fg}";
-        document.getElementById("GmailDesktopWindowControls").style.fill="${fg}";
-        document.getElementById("GmailDesktopOptions").style.fill="${fg}";
-    `)
 }
