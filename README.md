@@ -22,6 +22,10 @@ Once done, run any or all of the following:
 
 **Linux**: `electron-packager . "Gmail" --overwrite --asar=true --platform=linux --arch=x64 --icon=assets/icons/png/gmail.png --prune=true --out=release-builds`
 
+## Credits
+
+Credits go to FontAwesome ([License](https://fontawesome.com/license)) for the glyphs used for the menu, close, minimize, maximize and restore icons used in non-macOS platforms. No changes were made to these assets aside from conversion from `.svg` to `.png`.
+
 ## TODO:
 
 - Add System-level notifications
