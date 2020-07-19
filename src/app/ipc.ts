@@ -24,6 +24,10 @@ export const init = (app: App, mw: BrowserWindow) => {
         if (process.platform == 'win32') {
             updateColor(mw, systemPreferences.getAccentColor())
         }
+
+        systemPreferences.on('accent-color-changed', () => {
+            updateColor(mw, systemPreferences.getAccentColor())
+        })
     })
 
     ipcMain.on('notification', (_: any, sender: string, subject: string) => {
