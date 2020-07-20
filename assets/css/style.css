@@ -1,20 +1,20 @@
 /* Animations for loading Part I */
 
 @keyframes fadein {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 /* Animations for loading Part II */
 
 body {
-  height: 100%;
-  background: rgb(40, 40, 40);
-  animation: fadein 2s;
+    height: 100%;
+    background: rgb(40, 40, 40);
+    animation: fadein 2s;
 }
 
 /* gb_jd gb_zd gb_rd gb_Zb <-- this is DARK THEME */
@@ -24,51 +24,51 @@ body {
 /* Removes the popout tabby thing on the bottom right which allows you to open Keep */
 
 [role$="navigation"][aria-label$="Toggle side panel"] {
-  display: None;
+    display: None;
 }
 
 /* The footer information like size used, etc. */
 
 #\:2 {
-  display: none;
+    display: none;
 }
 
 /* Remove that mysterious line that isn't where I want it */
 
 .nH.w-asV.aiw {
-  box-shadow: none;
+    box-shadow: none;
 }
 
 /* Top bar component I */
 
 .aiw {
-  /* padding: 4px; */
-  max-height: 32px;
+    /* padding: 4px; */
+    max-height: 32px;
 }
 
 /* Top bar component II */
 
 [role$="banner"] {
-  max-height: 48px !important;
-  box-shadow: 0px 1px #777777 !important;
+    max-height: 48px !important;
+    box-shadow: 0px 1px #777777 !important;
 }
 
 /* Removes the Gmail logo */
 
 [href$="#inbox"][title="Gmail"] {
-  display: None;
+    display: None;
 }
 
 /* Disable Google Apps */
 
 #gbwa {
-  display: none;
+    display: none;
 }
 
 /* Disable Help button */
 
 #lZwQje {
-  display: none;
+    display: none;
 }
 
 /* 
@@ -78,7 +78,7 @@ body {
 */
 
 [aria-label$="Search Mail"] {
-  margin-top: -6px;
+    margin-top: -6px;
 }
 
 /* 
@@ -88,238 +88,236 @@ body {
 */
 
 [aria-label$="Search mail"] {
-  margin-top: -6px;
+    margin-top: -6px;
 }
 
 /* Search results box */
 
 [gh$="sb"] {
-  min-width: 192px !important;
-  max-height: 32px !important;
-  margin-top: -6px !important;
-  margin-bottom: 6px !important;
+    min-width: 192px !important;
+    max-height: 32px !important;
+    margin-top: -6px !important;
+    margin-bottom: 6px !important;
 }
 
 /* Clear Search Button */
 
 [aria-label$="Clear search"] {
-  margin-top: -6px;
+    margin-top: -6px;
 }
 
 /* Search dropdown button */
 
 [aria-label$="Advanced search options"] {
-  margin-top: -6px;
+    margin-top: -6px;
 }
 
 /* Google Notifications */
 
-#gbwa + div {
-  display: none;
+#gbwa+div {
+    display: none;
 }
 
 /* The entire top area (dark theme) */
 
 .gb_jd.gb_zd.gb_rd.gb_Zb {
-  margin-top: -10px;
-  margin-bottom: 25px;
+    margin-top: -10px;
+    margin-bottom: 25px;
 }
 
 /* The entire top area (light theme) */
 
 .gb_jd.gb_zd.gb_rd:not(.gb_Zb) {
-  margin-top: -10px;
-  margin-bottom: 25px;
+    margin-top: -10px;
+    margin-bottom: 25px;
 }
 
 .gb_oc.gb_tc.gb_la.gb_vc {
-  padding: 2px !important;
-  margin-left: 18px !important;
+    padding: 2px !important;
+    margin-left: 18px !important;
 }
 
-gb_fa > .gb_Ea {
-  padding: 0 !important;
+gb_fa>.gb_Ea {
+    padding: 0 !important;
 }
 
 .gb_fa {
-  border: 0 none !important;
+    border: 0 none !important;
 }
 
 .gb_nc {
-  text-align: right !important;
-  width: 48px !important;
+    text-align: right !important;
+    width: 48px !important;
 }
 
 .gb_mc.gb_Ja.gb_lc {
-  height: 24px !important;
-  margin-top: 1px;
+    height: 24px !important;
+    margin-top: 1px;
 }
 
 .gb_fa.gb_7f.gb_f {
-  width: 24px !important;
+    width: 24px !important;
 }
 
 .gb_ja:not(.gb_ka) .gb_fa {
-  width: auto !important;
-  margin-left: 0 !important;
+    width: auto !important;
+    margin-left: 0 !important;
 }
 
 .gb_fa {
-  border: 0x none !important;
-  background-color: transparent !important;
+    border: 0x none !important;
+    background-color: transparent !important;
 }
 
 .gb_fa:focus {
-  border: 0 none !important;
-  background-color: transparent !important;
-  box-shadow: none !important;
-  -webkit-box-shadow: none !important;
+    border: 0 none !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
 }
 
-.gb_x:active,
-.gb_x:focus,
-.gb_x:focus:hover {
-  background: transparent none !important;
+.gb_x:active, .gb_x:focus, .gb_x:focus:hover {
+    background: transparent none !important;
 }
 
 /* Hamburger menu */
 
 [aria-label$="Main menu"] {
-  margin-top: -6px !important;
+    margin-top: -6px !important;
 }
 
 /* Account icon */
 
 [data-ogsr-up] {
-  margin-top: -6px !important;
+    margin-top: -6px !important;
 }
 
 /* Weird bubble around account icon for Uni accounts */
 
 .gb_ia.gb_yg.gb_g {
-  background-color: rgba(0, 0, 0, 0) !important;
-  border: none !important;
-  box-shadow: none !important;
-  width: 48px !important;
+    background-color: rgba(0, 0, 0, 0) !important;
+    border: none !important;
+    box-shadow: none !important;
+    width: 48px !important;
 }
 
-.gb_ja.gb_Bg.gb_g > .gb_ka {
-  display: none !important;
+.gb_ja.gb_Bg.gb_g>.gb_ka {
+    display: none !important;
 }
 
 .gb_ja.gb_Bg.gb_g {
-  background-color: rgb(0, 0, 0, 0) !important;
-  border: none !important;
-  width: inherit !important;
+    background-color: rgb(0, 0, 0, 0) !important;
+    border: none !important;
+    width: inherit !important;
 }
 
 /* Weird bubbling effect when clicking on uni account icon */
 
 .gb_ga.gb_xg.gb_f.gb_Ac {
-  box-shadow: none !important;
+    box-shadow: none !important;
 }
 
 /* This controls that wierd line that often cuts things off */
 
 .gb_id.gb_yd.gb_qd.gb_Xb {
-  height: 72px !important;
-  margin-top: -6px !important;
+    height: 72px !important;
+    margin-top: -6px !important;
 }
 
 /* Account Changing Menu */
 
 [aria-label$="Account Information"] {
-  margin-top: -16px;
+    margin-top: -16px;
 }
 
 /* More Tools arrow */
 
 .brC-dA-I-Jw.brC-aMv-auO {
-  display: None;
+    display: None;
 }
 
 /* Print button (use native print) */
 
 [data-tooltip$="Print all"] {
-  display: None !important;
+    display: None !important;
 }
 
 /* Hide open-in-new-window button */
 
 .J-N:last-of-type {
-  display: None !important;
+    display: None !important;
 }
 
 /* Custom titlebar for Windows & Linux */
 
 #GmailDesktopTitlebar {
-  display: flex;
-  justify-content: space-between;
-  /* padding-left: 8px;
+    display: flex;
+    justify-content: space-between;
+    /* padding-left: 8px;
   padding-right: 8px; */
-  height: 32px;
-  width: 100vw;
-  -webkit-app-region: drag;
-  background-color: #7f7f7f;
-  z-index: 100;
-  position: fixed;
+    height: 32px;
+    width: 100vw;
+    -webkit-app-region: drag;
+    background-color: #7f7f7f;
+    z-index: 100;
+    position: fixed;
 }
 
 #GmailDesktopWindowControlsWrapper {
-  height: 32px;
+    height: 32px;
 }
 
 #GmailDesktopWindowControls {
-  display: flex;
-  max-height: 32px;
+    display: flex;
+    max-height: 32px;
 }
 
 #gmailDesktopOptions {
-  -webkit-app-region: no-drag;
-  max-height: 32px;
-  max-width: 32px;
-  height: 32px;
-  width: 32px;
-  opacity: 0.6;
+    -webkit-app-region: no-drag;
+    max-height: 32px;
+    max-width: 32px;
+    height: 32px;
+    width: 32px;
+    opacity: 0.6;
 }
 
 #gmailDesktopOptions:hover {
-  opacity: 1;
-  background-color: hsla(0, 0%, 100%, 0.25);
+    opacity: 1;
+    background-color: hsla(0, 0%, 100%, 0.25);
 }
 
 .winButton {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  pointer-events: auto;
-  height: 16px;
-  width: auto;
-  padding: 8px;
-  opacity: 0.6 !important;
-  -webkit-app-region: no-drag;
-  user-select: none;
-  cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    pointer-events: auto;
+    height: 16px;
+    width: auto;
+    padding: 8px;
+    opacity: 0.6 !important;
+    -webkit-app-region: no-drag;
+    user-select: none;
+    cursor: pointer;
 }
 
 .winButton:hover {
-  opacity: 1 !important;
-  background-color: hsla(0, 0%, 100%, 0.25);
+    opacity: 1 !important;
+    background-color: hsla(0, 0%, 100%, 0.25);
 }
 
 .winButton.options:hover {
-  opacity: 1;
-  background-color: hsla(0, 0%, 100%, 0.25);
+    opacity: 1;
+    background-color: hsla(0, 0%, 100%, 0.25);
 }
 
 .winButton.close:hover {
-  opacity: 1;
-  background-color: #f04747 !important;
+    opacity: 1;
+    background-color: #f04747 !important;
 }
 
 body.withWinTitlebar {
-  margin-top: 32px !important;
-  height: calc(100% - 33px) !important;
-  overflow-x: hidden;
+    margin-top: 32px !important;
+    height: calc(100% - 33px) !important;
+    overflow-x: hidden;
 }

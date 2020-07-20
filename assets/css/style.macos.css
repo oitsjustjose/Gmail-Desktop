@@ -1,43 +1,48 @@
 /* Add space for traffic lights */
 
 /* Main window */
+
 #gb {
-  padding-left: 60px;
+    padding-left: 60px;
 }
 
 /* Email viewer */
+
 body.xE .G-atb,
 /* Compose window */
+
 .Io {
-  padding-left: 85px !important;
+    padding-left: 85px !important;
 }
 
 /* PDF viewier */
+
 .aLF-aPX-aPU-J6 {
-  margin-left: 75px;
+    margin-left: 75px;
 }
 
 .aiw {
-  /* padding: 4px; */
-  max-height: 32px;
-  -webkit-app-region: drag;
+    /* padding: 4px; */
+    max-height: 32px;
+    -webkit-app-region: drag;
 }
 
 [role$="banner"] {
-  max-height: 48px !important;
-  -webkit-app-region: drag;
-  box-shadow: 0px 1px #777777 !important;
+    max-height: 48px !important;
+    -webkit-app-region: drag;
+    box-shadow: 0px 1px #777777 !important;
 }
 
 .gb_jd.gb_zd.gb_rd.gb_Zb {
-  margin-top: -10px;
-  margin-bottom: 25px;
-  -webkit-app-region: drag;
+    margin-top: -10px;
+    margin-bottom: 25px;
+    -webkit-app-region: drag;
 }
 
 /* The entire top area (light theme) */
+
 .gb_jd.gb_zd.gb_rd:not(.gb_Zb) {
-  margin-top: -10px;
-  margin-bottom: 25px;
-  -webkit-app-region: drag;
+    margin-top: -10px;
+    margin-bottom: 25px;
+    -webkit-app-region: drag;
 }

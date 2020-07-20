@@ -1,5 +1,18 @@
 # Changelog
 
+## 2.0.2
+
+### Fixed
+
+- Appearance of custom titlebar on Windows / Linux
+- Color of custom titlebar on Windows not updating automatically on Windows accent color change
+- Maximize / Restore icon not changing properly if using Windows Snap to maximize / restore
+
+### Changed
+
+- Hover overlay for options icon being Blue
+- New icons for Titlebar (credits to FontAwesome -- see README.md for full credits)
+
 ## 2.0.1
 
 ### Fixed

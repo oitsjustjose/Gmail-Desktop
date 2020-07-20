@@ -44,6 +44,6 @@ const parseFile = (fp: string, defaults: IDataSchema) => {
     try {
         return JSON.parse(fs.readFileSync(fp).toString())
     } catch (ex) {
-        return defaults;
+        return defaults
     }
 }

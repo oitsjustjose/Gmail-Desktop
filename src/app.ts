@@ -4,7 +4,7 @@ import MakeWindow from './app/mw'
 import * as mailto from './utils/mailto'
 import { getMenu } from './utils/utils'
 
-let window: BrowserWindow | null;
+let window: BrowserWindow | null
 
 const initEvts = () => {
     app.on('window-all-closed', () => {
