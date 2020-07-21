@@ -31,31 +31,33 @@ export const init = (app: App, mw: BrowserWindow) => {
     })
 
     ipcMain.on('notification', (_: any, sender: string, subject: string) => {
-        soundCheck()
+        if (shouldNotify()) {
+            soundCheck()
 
-        const notif = new Notification({
-            title: process.platform == 'win32' ? `From: ${sender}` : 'New Mail',
-            subtitle: process.platform == 'win32' ? subject : `From: ${sender}`,
-            body: subject,
-            sound: 'gmail'
-        })
+            const notif = new Notification({
+                title: process.platform == 'win32' ? `From: ${sender}` : 'New Mail',
+                subtitle: process.platform == 'win32' ? subject : `From: ${sender}`,
+                body: subject,
+                sound: 'gmail'
+            })
 
-        notif.addListener('click', () => {
-            if (mw.isMinimized()) {
-                mw.restore()
-            }
-            if (!mw.isVisible()) {
-                mw.show()
-            }
-            mw.focus()
-        })
+            notif.addListener('click', () => {
+                if (mw.isMinimized()) {
+                    mw.restore()
+                }
+                if (!mw.isVisible()) {
+                    mw.show()
+                }
+                mw.focus()
+            })
 
-        notif.show()
+            notif.show()
+        }
     })
 }
 
 const soundCheck = () => {
-    if (shouldNotify() && Notification.isSupported()) {
+    if (Notification.isSupported()) {
         if (process.platform == 'darwin') {
             if (!fs.existsSync(`${homedir()}/Library/Sounds/gmail.caf`)) {
                 fs.copyFileSync(
