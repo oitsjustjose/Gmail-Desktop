@@ -1,7 +1,5 @@
-import { App, MenuItemConstructorOptions } from 'electron'
+import { App, BrowserWindow, KeyboardEvent, MenuItem, MenuItemConstructorOptions } from 'electron'
 import Store from '../app/store'
-
-let doNotifs = false
 
 const store = new Store({
     configName: 'user-preferences',
@@ -26,12 +24,10 @@ export const setWindow = (x: number, y: number, width: number, height: number) =
 }
 
 export const shouldNotify = () => {
-    return doNotifs
+    return store.get('notifications')
 }
 
 const menu = (app: App) => {
-    doNotifs = store.get('notifications')
-
     const tmpl: Array<MenuItemConstructorOptions> = [{
         label: 'File',
         submenu: [
@@ -40,10 +36,11 @@ const menu = (app: App) => {
             }, {
                 label: 'Show Notifications',
                 type: 'checkbox',
-                checked: doNotifs,
-                click: () => {
-                    doNotifs = !doNotifs
-                    store.set('notifications', doNotifs)
+                checked: store.get('notifications'),
+                click: (menuItem: MenuItem, bw: BrowserWindow | undefined, evt: KeyboardEvent) => {
+                    const newSetting = !store.get('notifications')
+                    store.set('notifications', newSetting)
+                    menuItem.checked = newSetting
                 }
             }, {
                 label: 'Make Default Mail App',
@@ -109,8 +106,6 @@ const menu = (app: App) => {
 }
 
 const macOsMenu = (app: App) => {
-    doNotifs = store.get('notifications')
-
     const tmpl: Array<MenuItemConstructorOptions> = [{
         label: 'Gmail Desktop',
         submenu: [{
@@ -132,10 +127,11 @@ const macOsMenu = (app: App) => {
         }, {
             label: 'Show Notifications',
             type: 'checkbox',
-            checked: doNotifs,
-            click: () => {
-                doNotifs = !doNotifs
-                store.set('notifications', doNotifs)
+            checked: store.get('notifications'),
+            click: (menuItem: MenuItem, bw: BrowserWindow | undefined, evt: KeyboardEvent) => {
+                const newSetting = !store.get('notifications')
+                store.set('notifications', newSetting)
+                menuItem.checked = newSetting
             }
         }, {
             type: 'separator'
