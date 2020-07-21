@@ -1,8 +1,12 @@
-import { ipcRenderer as ipc, remote, BrowserWindowProxy } from 'electron'
+import { ipcRenderer as ipc, remote } from 'electron'
 
-let lastUnread: number = 0
-let unreadSubjects: Array<string> = Array()
-let unreadSenders: Array<string> = Array()
+interface Message {
+    sender: string,
+    subject: string,
+}
+
+let lastUnread = 0
+let previouslyRead: Array<Message> = Array()
 
 const icns = {
     close: 'https://raw.githubusercontent.com/oitsjustjose/Gmail-Desktop/master/assets/menu/close.png',
@@ -13,19 +17,13 @@ const icns = {
 }
 
 const searchUnread = () => {
-    const unreadEl = document.querySelector('.aio.UKr6le > .bsU')
-    let unreadCnt
-
-    if (unreadEl) {
-        unreadCnt = parseInt(unreadEl.innerHTML)
-    } else {
-        unreadCnt = 0
-    }
+    const unreadEl = document.querySelector('.aio.UKr6le .bsU')
+    const unreadCnt = unreadEl ? parseInt((unreadEl as HTMLDivElement).innerText) : 0
 
     if (unreadCnt != lastUnread) {
         ipc.send('unread', unreadCnt)
         if (unreadCnt > lastUnread) {
-            fetchSubjects()
+            sendNotification()
         }
     }
 
@@ -50,43 +48,26 @@ const initMaximizeHandlers = () => {
     })
 }
 
-const fetchSubjects = () => {
-    const unreadEls = document.querySelectorAll('zA zE')
+const sendNotification = () => {
+    const unreadEls = document.querySelectorAll("[draggable=true]") as NodeList
 
     unreadEls.forEach((el) => {
         if (el.childNodes) {
-            let sender = (el
-                .childNodes[4]
-                .childNodes[1]
-                .childNodes[0]
-                .childNodes[0] as Element
-            ).innerHTML
+            const sender = (el as HTMLElement).querySelector('[email]')?.getAttribute('email')
+            const subject = (el as HTMLElement).querySelector('[data-thread-id]')?.innerHTML
 
-            let subject = (el
-                .childNodes[5]
-                .childNodes[0]
-                .childNodes[0]
-                .childNodes[0]
-                .childNodes[0]
-                .childNodes[0]
-                .childNodes[0] as Element
-            ).innerHTML
+            if (sender && subject) {
+                console.log(sender, subject)
 
-            if (!subject) {
-                subject = (el
-                    .childNodes[5]
-                    .childNodes[0]
-                    .childNodes[0]
-                    .childNodes[0]
-                    .childNodes[0]
-                    .childNodes[0] as Element
-                ).innerHTML
-            }
+                const msg: Message = {
+                    subject: subject,
+                    sender: sender
+                }
 
-            if (!(unreadSubjects.includes(subject) && unreadSenders.includes(sender))) {
-                ipc.send('notification', sender, subject)
-                unreadSenders.push(sender)
-                unreadSubjects.push(subject)
+                if (!previouslyRead.includes(msg)) {
+                    ipc.send('notification', sender, subject)
+                    previouslyRead.push(msg)
+                }
             }
         }
     })
