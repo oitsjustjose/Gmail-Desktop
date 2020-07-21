@@ -57,8 +57,6 @@ const sendNotification = () => {
             const subject = (el as HTMLElement).querySelector('[data-thread-id]')?.innerHTML
 
             if (sender && subject) {
-                console.log(sender, subject)
-
                 const msg: Message = {
                     subject: subject,
                     sender: sender
