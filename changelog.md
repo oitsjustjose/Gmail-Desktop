@@ -1,5 +1,16 @@
 # Changelog
 
+## 2.0.3
+
+### Changed
+
+- Settings storage now performs improved validation
+
+### Fixed
+
+- Notifications not working
+- Custom titlebar not working on Linux as intended
+
 ## 2.0.2
 
 ### Fixed
