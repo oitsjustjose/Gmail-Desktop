@@ -16,9 +16,9 @@ export default () => {
         height: winProps.height,
         x: winProps.x,
         y: winProps.y,
-        frame: process.platform != 'darwin' && process.platform != 'win32',
+        frame: false,
         titleBarStyle: 'hidden',
-        transparent: process.platform == 'darwin',
+        transparent: true,
         icon: path.resolve(`${path.dirname(require.main!.filename)}/../assets/icons/png/gmail.png`),
         show: process.platform != 'darwin',
         webPreferences: {
