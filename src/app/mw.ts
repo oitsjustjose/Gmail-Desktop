@@ -18,7 +18,7 @@ export default () => {
         y: winProps.y,
         frame: false,
         titleBarStyle: 'hidden',
-        transparent: true,
+        transparent: process.platform === 'darwin',
         icon: path.resolve(`${path.dirname(require.main!.filename)}/../assets/icons/png/gmail.png`),
         show: process.platform != 'darwin',
         webPreferences: {
