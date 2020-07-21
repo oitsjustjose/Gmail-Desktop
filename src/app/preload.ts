@@ -49,9 +49,13 @@ const initMaximizeHandlers = () => {
 }
 
 const sendNotification = () => {
-    const unreadEls = document.querySelectorAll("[draggable=true]") as NodeList
+    const unreadEls = document.querySelectorAll('table[role=grid]')
 
-    unreadEls.forEach((el) => {
+    if (!!!unreadEls || unreadEls.length <= 0) {
+        return
+    }
+
+    unreadEls[1].querySelectorAll('[draggable=true]').forEach((el) => {
         if (el.childNodes) {
             const sender = (el as HTMLElement).querySelector('[email]')?.getAttribute('email')
             const subject = (el as HTMLElement).querySelector('[data-thread-id]')?.innerHTML
